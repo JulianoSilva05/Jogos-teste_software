@@ -31,12 +31,16 @@
 
         .card,
         .image-box {
+            display: flex;
+            flex-direction: column;
             background: white;
             padding: 20px;
+            height: 70vh;
             border-radius: 10px;
             flex: 1 1 300px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             text-align: center;
+            justify-content: center;
         }
 
         .card img,
@@ -69,7 +73,7 @@
 
         .logo {
             width: 120px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
         }
 
@@ -78,7 +82,7 @@
             margin-bottom: 20px;
         }
         .card header img {
-    height: 36px; /* ou qualquer altura que desejar */
+    height: 37px; /* ou qualquer altura que desejar */
     width: auto;  /* mantém a proporção da imagem */
 }
 
