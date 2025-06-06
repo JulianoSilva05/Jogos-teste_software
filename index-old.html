@@ -28,42 +28,14 @@
             width: 100%;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             position: relative;
+            text-align: center;
         }
 
         h2 {
             font-size: 20px;
         }
 
-        .options button {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
-            width: 100%;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s ease;
-            text-align: left;
-        }
-
-        .options button:hover {
-            background-color: #f0f0f0;
-        }
-
-        .correct {
-            background-color: #c8e6c9;
-            border-color: #388e3c;
-            color: #2e7d32;
-        }
-
-        .incorrect {
-            background-color: #ffcdd2;
-            border-color: #d32f2f;
-            color: #c62828;
-        }
-
-        .next-btn {
+        .btn {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
@@ -74,140 +46,35 @@
             cursor: pointer;
         }
 
-        .next-btn:hover {
+        .btn:hover {
             background-color: #45a049;
         }
 
-        .mico {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            border-radius: 5px;
-            color: #856404;
-            font-style: italic;
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
         }
     </style>
 </head>
 
 <body>
     <div class="card">
-        <h2 id="question">Carregando pergunta...</h2>
-        <div class="options" id="options"></div>
-        <button class="next-btn" onclick="nextQuestion()">Próxima</button>
-        <div id="micoContainer"></div>
+        <img src="proz-logo.png" alt="Logo da Proz" class="logo">
+        <h2>Regras do Jogo</h2>
+        <p>
+            Cada equipe possui <strong>2 jogadores</strong>. A cada rodada, uma equipe joga o dado e avança nas casas do tabuleiro.
+        </p>
+        <p>
+            Se a equipe cair em uma casa marcada, deverá responder a uma pergunta do quiz. Se <strong>acertar</strong>, continua normalmente. Se <strong>errar</strong>, deverá <strong>pagar uma prenda</strong>!
+        </p>
+        <p>
+            A equipe pode <strong>optar por não pagar a prenda</strong>, mas nesse caso deverá <strong>voltar ao início do jogo</strong>.
+        </p>
+        <p>
+            Vence a equipe que <strong>chegar primeiro ao final</strong> do percurso!
+        </p>
+        <button class="btn" onclick="window.location.href='quiz.html'">Começar o Jogo</button>
     </div>
-
-    <script>
-        const micos = [
-            "Imitar um cantor famoso — cante um refrão exagerando nos trejeitos do artista.",
-            "Desfile de passarela improvisado — faça poses fashion no meio da sala, com direito a cara de modelo.",
-            "Sapateiro maluco — finja que está martelando sapatos no ritmo de uma música imaginária por 15 segundos.",
-            "Robô descarregado — ande como um robô travando e desligando até chegar ao ponto combinado.",
-            "Locutor de futebol épico — narre qualquer coisa à sua volta (até o ventilador) como se fosse a final da Copa.",
-            "Dublagem dramática — escolha alguém na roda e dublar todos os movimentos dele por 30 segundos, como num filme.",
-            "Estátua que espirra — fique parado feito estátua, mas dê um espirro cinematográfico a cada 5 segundos.",
-            "Dança do quadrado invisível — dance preso dentro de um “quadrado” minúsculo, sem sair da linha imaginária.",
-            "Pinguim equilibrista — caminhe segurando um livro na cabeça e batendo “asas” com os braços.",
-            "Rap da vida cotidiana — crie um rap freestyle sobre algo banal (lavar louça, pegar ônibus) em 20 segundos."
-        ];
-
-        const quiz = [
-            {
-                q: "Por que a qualidade do software é importante para a satisfação do cliente?",
-                options: [
-                    "Porque reduz o custo de desenvolvimento.",
-                    "Porque permite lançar o produto mais rapidamente.",
-                    "Porque garante que o software atenda às expectativas do cliente.",
-                    "Porque elimina a necessidade de testes."
-                ], answer: 2
-            },
-            {
-                q: "Qual é o objetivo do teste de usabilidade?",
-                options: [
-                    "Verificar a performance do sistema.",
-                    "Medir a segurança do software.",
-                    "Avaliar a facilidade de uso para o usuário final.",
-                    "Encontrar falhas no código-fonte."
-                ], answer: 2
-            },
-            {
-                q: "Para que serve entender o Ciclo de Vida do Desenvolvimento de Software?",
-                options: [
-                    "Para escolher a linguagem de programação.",
-                    "Para evitar testes.",
-                    "Para planejar, desenvolver e manter o software com qualidade.",
-                    "Para desenvolver hardware."
-                ], answer: 2
-            },
-            {
-                q: "Qual o propósito da norma IEEE-829 em testes de software?",
-                options: [
-                    "Definir padrões de codificação.",
-                    "Gerenciar requisitos de negócios.",
-                    "Padronizar documentos de teste.",
-                    "Organizar equipes de desenvolvimento."
-                ], answer: 2
-            },
-            {
-                q: "Quais são três benefícios da virtualização para empresas?",
-                options: [
-                    "Menor segurança, maior consumo de energia, menos flexibilidade.",
-                    "Custo elevado, menor escalabilidade, alta complexidade.",
-                    "Melhor uso de recursos, economia de custos, maior flexibilidade.",
-                    "Dependência de hardware, aumento de falhas, menor desempenho."
-                ], answer: 2
-            }
-        ];
-
-        let current = 0;
-        let answered = false;
-
-        function showQuestion(index) {
-            answered = false;
-            document.getElementById("micoContainer").innerHTML = "";
-            const question = quiz[index];
-            document.getElementById("question").innerText = question.q;
-            const optionsDiv = document.getElementById("options");
-            optionsDiv.innerHTML = "";
-            question.options.forEach((opt, i) => {
-                const btn = document.createElement("button");
-                btn.innerText = opt;
-                btn.onclick = () => selectOption(btn, i === question.answer);
-                optionsDiv.appendChild(btn);
-            });
-        }
-
-        function selectOption(button, isCorrect) {
-            if (answered) return;
-            answered = true;
-            const buttons = document.querySelectorAll(".options button");
-            buttons.forEach(b => b.disabled = true);
-            if (isCorrect) {
-                button.classList.add("correct");
-                document.getElementById("micoContainer").innerHTML = "";
-            } else {
-                button.classList.add("incorrect");
-                buttons[quiz[current].answer].classList.add("correct");
-
-                // Escolher um mico aleatório e mostrar
-                const randomMico = micos[Math.floor(Math.random() * micos.length)];
-                document.getElementById("micoContainer").innerHTML =
-                    `<div class="mico"><strong>Mico:</strong> ${randomMico}</div>`;
-            }
-        }
-
-        function nextQuestion() {
-            if (current < quiz.length - 1) {
-                current++;
-                showQuestion(current);
-            } else {
-                document.querySelector(".card").innerHTML = `<h2>Fim do Quiz!</h2>`;
-            }
-        }
-
-        showQuestion(current);
-    </script>
 </body>
 
 </html>
