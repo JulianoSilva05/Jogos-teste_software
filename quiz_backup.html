@@ -99,20 +99,6 @@
             color: #856404;
             font-style: italic;
         }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .spin-animation {
-            animation: spin 1s ease-in-out;
-        }
     </style>
 </head>
 
@@ -121,12 +107,7 @@
         <img src="proz-logo_branca.png" alt="Logo da Proz" class="logo">
     </header>
     <div class="card">
-        <h2>
-            <span id="question">Carregando pergunta...</span>
-            <span id="dice" title="Clique para lançar o dado" onclick="rollDice()"
-                style="cursor: pointer; margin-left: 10px;">clique aqui → 🎲</span>
-            <span id="dice-result" style="margin-left: 10px; font-size: 16px; color: #4caf50;"></span>
-        </h2>
+        <h2 id="question">Carregando pergunta...</h2>
         <div class="options" id="options"></div>
         <button class="next-btn" onclick="nextQuestion()">Próxima</button>
         <div id="micoContainer"></div>
@@ -416,25 +397,6 @@
                 optionsDiv.appendChild(btn);
             });
         }
-
-        function rollDice() {
-            const dice = document.getElementById("dice");
-
-            // Adiciona a classe de animação
-            dice.classList.add("spin-animation");
-
-            // Depois que a animação terminar (1s), remove a classe para permitir nova animação
-            dice.addEventListener("animationend", () => {
-                dice.classList.remove("spin-animation");
-            }, { once: true });
-
-            // Gera o número aleatório e mostra o resultado com delay para combinar com a animação
-            setTimeout(() => {
-                const result = Math.floor(Math.random() * 6) + 1;
-                document.getElementById("dice-result").innerText = `Resultado: ${result}`;
-            }, 900); // Mostra pouco antes de terminar o giro
-        }
-
 
         function selectOption(button, isCorrect) {
             if (answered) return;
