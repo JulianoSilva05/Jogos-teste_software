@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz: Não Me Faça Pensar</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 0;
+      background-color: #f5f5f5;
+      min-height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .logo {
+      width: 150px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
+      width: 90%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      font-size: 20px;
+    }
+
+    .options button {
+      display: block;
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      text-align: left;
+    }
+
+    .options button:hover {
+      background-color: #f0f0f0;
+    }
+
+    .correct {
+      background-color: #c8e6c9;
+      border-color: #388e3c;
+      color: #2e7d32;
+    }
+
+    .incorrect {
+      background-color: #ffcdd2;
+      border-color: #d32f2f;
+      color: #c62828;
+    }
+
+    .next-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .next-btn:hover {
+      background-color: #45a049;
+    }
+
+    .mico {
+      margin-top: 15px;
+      padding: 10px;
+      background-color: #fff3cd;
+      border: 1px solid #ffeeba;
+      border-radius: 5px;
+      color: #856404;
+      font-style: italic;
+    }
+
+    @keyframes spin {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .spin-animation {
+      animation: spin 1s ease-in-out;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <img src="proz-logo_branca.png" alt="Logo da Proz" class="logo">
+  </header>
+  <div class="card">
+    <h2>
+      <span id="question">Carregando pergunta...</span>
+      <span id="dice" title="Clique para lançar o dado" onclick="rollDice()"
+        style="cursor: pointer; margin-left: 10px;">🎲</span>
+      <span id="dice-result" style="margin-left: 10px; font-size: 16px; color: #4caf50;"></span>
+    </h2>
+    <div class="options" id="options"></div>
+    <button class="next-btn" onclick="nextQuestion()">Próxima</button>
+    <div id="micoContainer"></div>
+  </div>
+
+  <script>
+    const micos = [
+      "Imite um animal por 10 segundos.",
+      "Fale como um robô até a próxima pergunta.",
+      "Dance como se ninguém estivesse olhando.",
+      "Fale uma frase famosa com sotaque diferente.",
+      "Desfile como se estivesse em uma passarela."  
+    ];
+
+    const quiz = [
+  { q: "Qual é a Primeira Lei da Usabilidade segundo Krug?", options: ["Seja criativo", "Use animações", "Não me faça pensar", "Clique com propósito"], answer: 2 },
+  { q: "O que um bom design de site deve evitar?", options: ["Ícones grandes", "Imagens chamativas", "Carga cognitiva desnecessária", "Cores vibrantes"], answer: 2 },
+  { q: "Se não for possível tornar a página autoevidente, ela deve ser:", options: ["Oculta", "Autoexplicativa", "Confusa", "Semântica"], answer: 1 },
+  { q: "O que o usuário deve pensar ao olhar para a página?", options: ["Isso é complicado!", "Onde clico agora?", "Ali está o que eu quero", "Preciso de ajuda!"], answer: 2 },
+  { q: "Segundo Krug, como os usuários geralmente interagem com a web?", options: ["Lendo tudo com atenção", "Escaneando rapidamente", "Navegando por voz", "Usando mapas"], answer: 1 },
+  { q: "O que significa ‘satisfazer’ (satisficing)?", options: ["Escolher a melhor opção possível", "Escolher a primeira opção razoável", "Escolher aleatoriamente", "Escolher após comparar tudo"], answer: 1 },
+  { q: "Por que os usuários se atrapalham?", options: ["Falta de atenção", "Bugs", "Não leem instruções", "Preferem vídeos"], answer: 2 },
+  { q: "O que é essencial para um bom design de painel?", options: ["Muitas animações", "Hierarquia visual clara", "Sons de alerta", "Instruções longas"], answer: 1 },
+  { q: "O que são convenções em web design?", options: ["Eventos de tecnologia", "Elementos familiares como ícones ou menus padrão", "Softwares pagos", "Regras de programação"], answer: 1 },
+  { q: "Qual é o impacto de excesso de ruído visual?", options: ["Torna o site mais bonito", "Complica a compreensão", "Estimula a criatividade", "Aumenta o tempo no site"], answer: 1 },
+  { q: "Quantos cliques os usuários aceitam?", options: ["Somente um", "Máximo de dois", "Quantos forem, se forem fáceis", "Nenhum"], answer: 2 },
+  { q: "O que é o 'cheiro da informação'?", options: ["Perfume virtual", "Sinal de segurança", "Indício de que o usuário está no caminho certo", "Taxa de conversão"], answer: 2 },
+  { q: "O que diz a Terceira Lei da Usabilidade?", options: ["Seja amigável", "Elimine palavras desnecessárias", "Mantenha o design complexo", "Crie instruções detalhadas"], answer: 1 },
+  { q: "Como devem ser as instruções?", options: ["Longas e completas", "Curtas e, se possível, desnecessárias", "Escondidas", "Redundantes"], answer: 1 },
+  { q: "Qual é o papel da navegação?", options: ["Decorar a página", "Exibir promoções", "Orientar o usuário", "Divertir o visitante"], answer: 2 },
+  { q: "O que são breadcrumbs?", options: ["Erros de design", "Trilhas de navegação que mostram onde o usuário está", "Plugins de segurança", "Cookies visuais"], answer: 1 },
+  { q: "O que a página inicial deve comunicar?", options: ["Anúncios", "Identidade e missão do site", "Nome da equipe", "Slogan comercial"], answer: 1 },
+  { q: "Qual elemento ajuda o usuário a explorar mais?", options: ["Vídeo automático", "Funcionalidade de busca visível", "Pop-up de assinatura", "Rodapé"], answer: 1 },
+  { q: "O que causa conflitos nas equipes?", options: ["Falta de reuniões", "Diferenças de perspectiva", "Excesso de recursos", "Salários"], answer: 1 },
+  { q: "Qual a solução para debates intermináveis?", options: ["Pesquisa de mercado", "Testes de usabilidade reais", "Votação da equipe", "Brainstorming criativo"], answer: 1 },
+  { q: "Quando é melhor testar?", options: ["No final", "Depois do lançamento", "O quanto antes", "Quando sobra tempo"], answer: 2 },
+  { q: "Testar um usuário é:", options: ["Insuficiente", "Melhor que nenhum", "Inútil", "Caro demais"], answer: 1 },
+  { q: "O que é um ‘mensch’ no design?", options: ["Bot de ajuda", "Um site íntegro que se preocupa com o usuário", "Um painel de controle", "Um botão personalizado"], answer: 1 },
+  { q: "O que pode esgotar rapidamente a boa vontade?", options: ["Novidades", "Um único erro grave", "Tutorial extenso", "Filtros coloridos"], answer: 1 },
+  { q: "O argumento mais forte a favor da acessibilidade é:", options: ["Aumento de tráfego", "É a coisa certa a fazer", "Redução de custos", "Otimização de SEO"], answer: 1 },
+  { q: "Uma ação imediata para melhorar a acessibilidade é:", options: ["Usar vídeos longos", "Adicionar textos alternativos em imagens", "Criar menus ocultos", "Tornar o site preto e branco"], answer: 1 },
+  { q: "Pedir dados demais pode causar:", options: ["Engajamento", "Mentiras e evasão", "Vendas", "Análise preditiva"], answer: 1 },
+  { q: "Qual deve ser a prioridade sobre ‘embelezar’ o site?", options: ["Efeitos visuais", "Funcionalidade sem sacrificar a usabilidade", "Criatividade", "SEO"], answer: 1 },
+  { q: "Krug defende que o design deve ser:", options: ["Inspirador", "Intuitivo", "Artístico", "Rápido"], answer: 1 },
+  { q: "Um site que funciona bem é aquele que:", options: ["Ganha prêmios", "É popular nas redes sociais", "Reduz o esforço mental do usuário", "Tem muitos recursos"], answer: 2 },
+  { q: "O slogan deve:", options: ["Ser engraçado", "Explicar o valor do site", "Ser poético", "Rimar"], answer: 1 },
+  { q: "Navegar num site deve ser como:", options: ["Resolver um enigma", "Assistir a um vídeo", "Mover-se em um espaço físico familiar", "Ler um artigo acadêmico"], answer: 2 },
+  { q: "O maior erro da página inicial é:", options: ["Estar feia", "Ter texto demais", "Não mostrar o ponto principal do site", "Ter poucas imagens"], answer: 2 },
+  { q: "Qual é o papel dos testes em design?", options: ["Validar teorias", "Melhorar a experiência real do usuário", "Otimizar o código", "Aumentar o tempo de permanência"], answer: 1 },
+  { q: "Segundo Krug, qual fator mais frustra os usuários?", options: ["Falta de animações", "Confusão sobre onde clicar", "Cor de fundo ruim", "Pop-ups"], answer: 1 },
+  { q: "Um bom design ajuda o usuário a:", options: ["Fazer login", "Alcançar seu objetivo com facilidade", "Comprar mais", "Compartilhar conteúdo"], answer: 1 },
+  { q: "Como a estética influencia a experiência?", options: ["Distrai", "Melhora a percepção de qualidade", "Aumenta o tempo de carregamento", "Reduz a taxa de rejeição"], answer: 1 },
+  { q: "O que torna uma escolha 'descompromissada'?", options: ["Baseada em sorte", "Sem retorno", "Simples, clara e sem hesitação", "Automática"], answer: 2 },
+  { q: "O que são ‘conversas vãs’ na web?", options: ["Pop-ups", "FAQs", "Textos introdutórios inúteis", "Comentários de blog"], answer: 2 },
+  { q: "Krug afirma que os designers devem:", options: ["Inovar sempre", "Agradar ao chefe", "Observar como as pessoas realmente usam a web", "Usar o máximo de recursos visuais"], answer: 2 }
+];
+
+    let current = 0;
+    let answered = false;
+
+    function showQuestion(index) {
+      answered = false;
+      document.getElementById("micoContainer").innerHTML = "";
+      const question = quiz[index];
+      document.getElementById("question").innerText = question.q;
+      const optionsDiv = document.getElementById("options");
+      optionsDiv.innerHTML = "";
+      question.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => selectOption(btn, i === question.answer);
+        optionsDiv.appendChild(btn);
+      });
+    }
+
+    function rollDice() {
+      const dice = document.getElementById("dice");
+      dice.classList.add("spin-animation");
+      dice.addEventListener("animationend", () => {
+        dice.classList.remove("spin-animation");
+      }, { once: true });
+      setTimeout(() => {
+        const result = Math.floor(Math.random() * 6) + 1;
+        document.getElementById("dice-result").innerText = `Resultado: ${result}`;
+      }, 900);
+    }
+
+    function selectOption(button, isCorrect) {
+      if (answered) return;
+      answered = true;
+      const buttons = document.querySelectorAll(".options button");
+      buttons.forEach(b => b.disabled = true);
+      if (isCorrect) {
+        button.classList.add("correct");
+        document.getElementById("micoContainer").innerHTML = "";
+      } else {
+        button.classList.add("incorrect");
+        buttons[quiz[current].answer].classList.add("correct");
+        const micoIndex = Math.floor(Math.random() * micos.length);
+        document.getElementById("micoContainer").innerHTML = `<div class='mico'>Desafio: ${micos[micoIndex]}</div>`;
+      }
+    }
+
+    function nextQuestion() {
+      if (!answered) {
+        alert("Por favor, selecione uma resposta antes de continuar.");
+        return;
+      }
+      current++;
+      if (current >= quiz.length) {
+        alert("Fim do quiz! Parabéns por participar.");
+        current = 0;
+      }
+      showQuestion(current);
+    }
+
+    showQuestion(current);
+  </script>
+</body>
+
+</html>
