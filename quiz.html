@@ -4,13 +4,12 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Quiz: Aula Inaugural de Desenvolvimento</title>
+    <link rel="shortcut icon" href="icon.png">
+    <title>Quiz - Inteligência Emocional</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
-            /* CORRIGIDO: Adicionado uma cor de fundo de emergência */
-            background-color: #2a2a3e;
             background-image: url(fundo.png);
             background-repeat: no-repeat;
             background-size: cover;
@@ -18,228 +17,583 @@
             min-height: 100vh;
             margin: 0;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
+            color: #333;
         }
 
-        header {
-            text-align: center;
-            padding: 20px;
-        }
-
-        .logo {
-            width: 150px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 800px;
-            width: 90%;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-        }
-
-        h2 {
-            font-size: 20px;
-            margin-bottom: 15px; /* Adicionado margem para espaçamento */
-        }
-
-        .options button {
-            display: block;
-            margin: 10px 0;
-            padding: 10px;
+        .quiz-container {
             width: 100%;
-            font-size: 16px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s ease;
-            text-align: left;
+            max-width: 650px;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
         }
 
-        .options button:hover {
+        .quiz-header {
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eee;
+            text-align: center;
+        }
+        
+        .quiz-header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        #question {
+            font-size: 22px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            text-align: center;
+        }
+
+        .btn-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+        }
+
+        .btn {
             background-color: #f0f0f0;
-        }
-
-        .correct {
-            background-color: #c8e6c9;
-            border-color: #388e3c;
-            color: #2e7d32;
-        }
-
-        .incorrect {
-            background-color: #ffcdd2;
-            border-color: #d32f2f;
-            color: #c62828;
-        }
-
-        .next-btn {
-            margin-top: 20px;
-            padding: 10px 20px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            padding: 15px;
             font-size: 16px;
-            background-color: #4caf50;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s ease;
+        }
+
+        .btn:hover:not(:disabled) {
+            background-color: #e0e0e0;
+            border-color: #999;
+        }
+        
+        .btn:disabled {
+            cursor: not-allowed;
+        }
+
+        .btn.correct {
+            background-color: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
+        .btn.incorrect {
+            background-color: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+        
+        #mico-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #mico-text {
+            font-size: 22px;
+            font-weight: bold;
+            color: #dc3545;
+        }
+
+        #next-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 10px 30px;
+            font-size: 18px;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            display: block; /* Garante que o botão fique centralizado corretamente */
-            margin-left: auto;
-            margin-right: auto;
+        }
+        #next-btn:hover {
+            background-color: #0056b3;
         }
 
-        .next-btn:hover {
-            background-color: #45a049;
+        #results-container h2 {
+            text-align: center;
         }
 
-        .mico {
-            margin-top: 15px;
-            padding: 10px;
-            background-color: #fff3cd;
-            border: 1px solid #ffeeba;
-            border-radius: 5px;
-            color: #856404;
-            font-style: italic;
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0deg);
-            }
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        .spin-animation {
-            animation: spin 1s ease-in-out;
-        }
     </style>
 </head>
 
 <body>
-    <header>
-        <img src="proz-logo_branca.png" alt="Logo da Proz" class="logo">
-    </header>
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1>Quiz: Inteligência Emocional</h1>
+        </div>
 
-    <div class="card">
-        <h2>
-            <span id="question">Carregando pergunta...</span>
-            <span id="dice" title="Clique para lançar o dado" onclick="rollDice()" style="cursor: pointer; margin-left: 10px;">🎲</span>
-            <span id="dice-result" style="margin-left: 10px; font-size: 16px; color: #4caf50;"></span>
-        </h2>
-        <div class="options" id="options"></div>
-        <button class="next-btn" onclick="nextQuestion()">Próxima</button>
-        <div id="micoContainer"></div>
+        <h2 id="question">Carregando pergunta...</h2>
+        <div id="answer-buttons" class="btn-grid">
+            </div>
+        
+        <div id="mico-container" style="display: none;">
+            <p id="mico-text">Resposta errada! A equipe deve pagar um mico!</p>
+            <button id="next-btn">Próxima Pergunta</button>
+        </div>
+
+        <div id="results-container" style="display: none;">
+            <h2>Fim de Jogo!</h2>
+            <p style="text-align:center; font-size: 20px;">Parabéns à equipe vencedora!</p>
+            <button id="restart-btn" onclick="location.reload()" style="display: block; margin: 20px auto 0; padding: 10px 30px; font-size: 18px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">Jogar Novamente</button>
+        </div>
+
     </div>
 
     <script>
-        const micos = [
-            "Imite um animal por 10 segundos.",
-            "Ande pela sala equilibrando um caderno na cabeça.",
-            "Dance como se ninguém estivesse olhando.",
-            "Ande de costas pela sala de aula.",
-            "Desfile como se estivesse em uma passarela.",
-            "Pule com um pé só.",
-            "Abrace alguém aleatório na sala de aula."
+        const questions = [
+            // Array de 40 perguntas sobre o livro
+            {
+                question: "Qual dos cinco componentes da Inteligência Emocional é a base para todos os outros, segundo Goleman?",
+                answers: [
+                    { text: "Autoconsciência", correct: true },
+                    { text: "Empatia", correct: false },
+                    { text: "Habilidades Sociais", correct: false },
+                    { text: "Motivação", correct: false }
+                ]
+            },
+            {
+                question: "O que Daniel Goleman descreve como 'sequestro emocional'?",
+                answers: [
+                    { text: "Uma reação emocional imediata e avassaladora, onde a amígdala assume o controle do cérebro.", correct: true },
+                    { text: "A capacidade de manipular as emoções de outras pessoas.", correct: false },
+                    { text: "Um estado de profunda concentração e foco.", correct: false },
+                    { text: "A supressão consciente de sentimentos negativos.", correct: false }
+                ]
+            },
+            {
+                question: "Qual parte do cérebro é considerada o 'centro de controle' das emoções impulsivas, como o medo e a raiva?",
+                answers: [
+                    { text: "Amígdala", correct: true },
+                    { text: "Córtex pré-frontal", correct: false },
+                    { text: "Hipocampo", correct: false },
+                    { text: "Cerebelo", correct: false }
+                ]
+            },
+            {
+                question: "O famoso 'teste do marshmallow' é usado no livro para ilustrar qual habilidade?",
+                answers: [
+                    { text: "A capacidade de adiar a gratificação e controlar impulsos.", correct: true },
+                    { text: "A habilidade de resolver problemas lógicos rapidamente.", correct: false },
+                    { text: "A capacidade de liderar um grupo de forma eficaz.", correct: false },
+                    { text: "A medição do Quociente de Inteligência (QI).", correct: false }
+                ]
+            },
+            {
+                question: "Segundo o livro, a empatia se baseia fundamentalmente em qual capacidade?",
+                answers: [
+                    { text: "Na autoconsciência; quanto mais abertos somos às nossas próprias emoções, mais hábeis seremos em ler os sentimentos dos outros.", correct: true },
+                    { text: "Na capacidade de memorizar nomes e rostos.", correct: false },
+                    { text: "Em um alto QI e raciocínio lógico.", correct: false },
+                    { text: "Na habilidade de falar em público com confiança.", correct: false }
+                ]
+            },
+            {
+                question: "Qual componente da Inteligência Emocional envolve o gerenciamento de sentimentos para que sejam apropriados à situação?",
+                answers: [
+                    { text: "Autocontrole ou Autorregulação", correct: true },
+                    { text: "Empatia", correct: false },
+                    { text: "Autoconsciência", correct: false },
+                    { text: "Habilidades Sociais", correct: false }
+                ]
+            },
+            {
+                question: "O que é 'fluxo' (flow), de acordo com o conceito apresentado por Goleman?",
+                answers: [
+                    { text: "Um estado de total imersão e foco em uma atividade, onde a pessoa se sente energizada e perde a noção do tempo.", correct: true },
+                    { text: "O fluxo de pensamentos negativos que devemos aprender a controlar.", correct: false },
+                    { text: "A comunicação fluida e eficaz em um ambiente de trabalho.", correct: false },
+                    { text: "A transição rápida entre diferentes estados emocionais.", correct: false }
+                ]
+            },
+            {
+                question: "Qual a principal mensagem de Goleman sobre a relação entre QI e sucesso na vida?",
+                answers: [
+                    { text: "O QI contribui com apenas cerca de 20% para o sucesso, sendo a Inteligência Emocional responsável pelo restante.", correct: true },
+                    { text: "O QI é o único fator determinante para o sucesso profissional e pessoal.", correct: false },
+                    { text: "QI e Inteligência Emocional são a mesma coisa.", correct: false },
+                    { text: "A Inteligência Emocional é irrelevante em comparação com a capacidade técnica.", correct: false }
+                ]
+            },
+            {
+                question: "A capacidade de usar nossas emoções mais profundas para nos mover e guiar em direção a objetivos é chamada de:",
+                answers: [
+                    { text: "Motivação", correct: true },
+                    { text: "Empatia", correct: false },
+                    { text: "Autocontrole", correct: false },
+                    { text: "Persuasão", correct: false }
+                ]
+            },
+            {
+                question: "A habilidade de lidar com relacionamentos e construir redes de contatos é o cerne de qual componente?",
+                answers: [
+                    { text: "Habilidades Sociais", correct: true },
+                    { text: "Autoconsciência", correct: false },
+                    { text: "Motivação", correct: false },
+                    { text: "Autocontrole", correct: false }
+                ]
+            },
+            {
+                question: "Como a ansiedade crônica afeta o desempenho intelectual, segundo o livro?",
+                answers: [
+                    { text: "Prejudica a capacidade de concentração e a memória de trabalho.", correct: true },
+                    { text: "Aumenta a criatividade e a capacidade de resolver problemas.", correct: false },
+                    { text: "Não tem efeito sobre o desempenho intelectual.", correct: false },
+                    { text: "Melhora o foco em tarefas de curto prazo.", correct: false }
+                ]
+            },
+            {
+                question: "O que Goleman quer dizer com 'alfabetização emocional'?",
+                answers: [
+                    { text: "Ensinar crianças e adultos a reconhecer, nomear e gerenciar suas próprias emoções e as dos outros.", correct: true },
+                    { text: "Aprender a ler e escrever sobre sentimentos em um diário.", correct: false },
+                    { text: "Tornar-se um especialista em psicologia.", correct: false },
+                    { text: "A capacidade de expressar emoções através da arte.", correct: false }
+                ]
+            },
+            {
+                question: "A capacidade de se acalmar após um evento estressante é um exemplo de:",
+                answers: [
+                    { text: "Autorregulação", correct: true },
+                    { text: "Empatia cognitiva", correct: false },
+                    { text: "Intuição", correct: false },
+                    { text: "Otimismo", correct: false }
+                ]
+            },
+            {
+                question: "Goleman argumenta que a Inteligência Emocional pode ser...",
+                answers: [
+                    { text: "Aprendida e desenvolvida ao longo da vida.", correct: true },
+                    { text: "Fixa desde o nascimento, como a cor dos olhos.", correct: false },
+                    { text: "Relevante apenas para psicólogos e terapeutas.", correct: false },
+                    { text: "Menos importante que a força física.", correct: false }
+                ]
+            },
+            {
+                question: "Qual é a diferença fundamental entre 'emoção' e 'humor' no contexto do livro?",
+                answers: [
+                    { text: "Emoções são mais intensas e de curta duração, enquanto o humor é um estado afetivo mais sutil e prolongado.", correct: true },
+                    { text: "Não há diferença, os termos são intercambiáveis.", correct: false },
+                    { text: "Emoções são sempre positivas e o humor é sempre negativo.", correct: false },
+                    { text: "O humor é uma emoção que só pode ser expressa socialmente.", correct: false }
+                ]
+            },
+            {
+                question: "A capacidade de perceber o que os outros sentem sem que eles digam é uma forma de:",
+                answers: [
+                    { text: "Empatia", correct: true },
+                    { text: "Telepatia", correct: false },
+                    { text: "Autocontrole", correct: false },
+                    { text: "Motivação intrínseca", correct: false }
+                ]
+            },
+            {
+                question: "Qual das seguintes atitudes é um pilar da motivação, segundo Goleman?",
+                answers: [
+                    { text: "Otimismo e persistência diante de frustrações.", correct: true },
+                    { text: "Buscar recompensas externas, como dinheiro e fama.", correct: false },
+                    { text: "Evitar desafios para não falhar.", correct: false },
+                    { text: "Competir de forma agressiva com os colegas.", correct: false }
+                ]
+            },
+            {
+                question: "O córtex pré-frontal, em contraste com a amígdala, é responsável por:",
+                answers: [
+                    { text: "Analisar as emoções e planejar uma resposta ponderada.", correct: true },
+                    { text: "Gerar reações de luta ou fuga.", correct: false },
+                    { text: "Armazenar memórias de longo prazo.", correct: false },
+                    { text: "Controlar o equilíbrio e a coordenação motora.", correct: false }
+                ]
+            },
+            {
+                question: "Líderes ressonantes, segundo Goleman, são aqueles que utilizam a Inteligência Emocional para:",
+                answers: [
+                    { text: "Criar um ambiente emocionalmente positivo e sintonizado com a equipe.", correct: true },
+                    { text: "Impor suas ideias através da autoridade.", correct: false },
+                    { text: "Focar exclusivamente em metas e resultados financeiros.", correct: false },
+                    { text: "Trabalhar de forma isolada para não influenciar os outros.", correct: false }
+                ]
+            },
+            {
+                question: "Qual é o primeiro passo para gerenciar uma emoção como a raiva?",
+                answers: [
+                    { text: "Reconhecer e nomear o sentimento (Autoconsciência).", correct: true },
+                    { text: "Suprimir o sentimento imediatamente.", correct: false },
+                    { text: "Agir impulsivamente sobre o sentimento.", correct: false },
+                    { text: "Culpar outra pessoa pela sua raiva.", correct: false }
+                ]
+            },
+            {
+                question: "A capacidade de se colocar no lugar do outro e sentir o que ele sente é chamada de:",
+                answers: [
+                    { text: "Empatia emocional", correct: true },
+                    { text: "Simpatia", correct: false },
+                    { text: "Contágio emocional", correct: false },
+                    { text: "Projeção", correct: false }
+                ]
+            },
+            {
+                question: "Por que a esperança é considerada uma forma de inteligência emocional?",
+                answers: [
+                    { text: "Porque ela nos motiva a não ceder à ansiedade ou depressão diante de adversidades.", correct: true },
+                    { text: "Porque é uma emoção puramente lógica.", correct: false },
+                    { text: "Porque pessoas com esperança ignoram a realidade.", correct: false },
+                    { text: "Porque é uma característica inata e não pode ser desenvolvida.", correct: false }
+                ]
+            },
+            {
+                question: "No ambiente de trabalho, qual habilidade da IE é crucial para dar e receber feedback?",
+                answers: [
+                    { text: "Habilidades Sociais e Empatia.", correct: true },
+                    { text: "Apenas o raciocínio lógico.", correct: false },
+                    { text: "Agressividade e competitividade.", correct: false },
+                    { text: "Ignorar as emoções e focar nos fatos.", correct: false }
+                ]
+            },
+            {
+                question: "O que Goleman chama de 'a arte de escutar'?",
+                answers: [
+                    { text: "Prestar atenção total, entender o conteúdo emocional por trás das palavras e demonstrar essa compreensão.", correct: true },
+                    { text: "Ficar em silêncio enquanto a outra pessoa fala.", correct: false },
+                    { text: "Ouvir apenas para encontrar uma oportunidade de responder.", correct: false },
+                    { text: "Concordar com tudo que a outra pessoa diz para evitar conflitos.", correct: false }
+                ]
+            },
+            {
+                question: "Qual o risco de não ter autoconsciência emocional?",
+                answers: [
+                    { text: "Ser controlado pelos próprios sentimentos sem entender o porquê.", correct: true },
+                    { text: "Tornar-se excessivamente lógico e frio.", correct: false },
+                    { text: "Desenvolver uma memória fotográfica.", correct: false },
+                    { text: "Ser imune ao estresse.", correct: false }
+                ]
+            },
+            {
+                question: "O que Goleman sugere sobre a expressão 'inteligência' no termo 'Inteligência Emocional'?",
+                answers: [
+                    { text: "Que existe uma forma de raciocínio e lógica aplicada às emoções, que pode ser usada de forma inteligente.", correct: true },
+                    { text: "Que é apenas uma metáfora e não tem relação com a inteligência real.", correct: false },
+                    { text: "Que pessoas emocionais são mais inteligentes que as racionais.", correct: false },
+                    { text: "Que só pessoas com alto QI podem ter alta IE.", correct: false }
+                ]
+            },
+            {
+                question: "A capacidade de inspirar e influenciar os outros é uma faceta de qual domínio da IE?",
+                answers: [
+                    { text: "Habilidades Sociais", correct: true },
+                    { text: "Autocontrole", correct: false },
+                    { text: "Motivação", correct: false },
+                    { text: "Empatia", correct: false }
+                ]
+            },
+            {
+                question: "O que é 'sintonia' (rapport) em um relacionamento interpessoal?",
+                answers: [
+                    { text: "Uma conexão harmoniosa e empática onde as pessoas se sentem à vontade e compreendidas.", correct: true },
+                    { text: "Uma competição para ver quem tem as melhores ideias.", correct: false },
+                    { text: "Um debate formal sobre um tópico específico.", correct: false },
+                    { text: "Uma relação baseada apenas em interesses profissionais.", correct: false }
+                ]
+            },
+            {
+                question: "Qual o papel do otimismo na motivação?",
+                answers: [
+                    { text: "Funciona como um motivador intrínseco, levando a pessoa a ver falhas como oportunidades de aprendizado.", correct: true },
+                    { text: "Leva à procrastinação, pois a pessoa acredita que tudo dará certo no final.", correct: false },
+                    { text: "Não tem relação com a motivação.", correct: false },
+                    { text: "O otimismo excessivo pode ser prejudicial, pois ignora os riscos.", correct: false }
+                ]
+            },
+            {
+                question: "Como a autoconsciência ajuda a tomar melhores decisões?",
+                answers: [
+                    { text: "Permite que usemos nossos 'sentimentos viscerais' ou intuição como uma fonte valiosa de informação.", correct: true },
+                    { text: "Elimina todas as emoções do processo de decisão.", correct: false },
+                    { text: "Faz com que a pessoa sempre escolha a opção mais segura.", correct: false },
+                    { text: "Aumenta a velocidade da decisão, mas não a qualidade.", correct: false }
+                ]
+            },
+             {
+                question: "Qual o impacto do estresse crônico no cérebro, segundo o livro?",
+                answers: [
+                    { text: "Pode danificar neurônios no hipocampo, prejudicando a aprendizagem e a memória.", correct: true },
+                    { text: "Fortalece as conexões neurais e melhora a memória.", correct: false },
+                    { text: "Aumenta o tamanho do córtex pré-frontal.", correct: false },
+                    { text: "Não causa nenhum dano físico, apenas cansaço mental.", correct: false }
+                ]
+            },
+            {
+                question: "A capacidade de resolver conflitos e negociar soluções é uma aplicação avançada de qual domínio?",
+                answers: [
+                    { text: "Habilidades Sociais", correct: true },
+                    { text: "Autoconsciência", correct: false },
+                    { text: "Motivação", correct: false },
+                    { text: "Empatia isolada", correct: false }
+                ]
+            },
+            {
+                question: "O que Goleman afirma sobre a origem das emoções?",
+                answers: [
+                    { text: "Elas são impulsos para a ação, planos instantâneos para lidar com a vida que a evolução nos instilou.", correct: true },
+                    { text: "São construções puramente sociais, sem base biológica.", correct: false },
+                    { text: "São defeitos do pensamento lógico que devem ser eliminados.", correct: false },
+                    { text: "São exclusivas dos seres humanos.", correct: false }
+                ]
+            },
+            {
+                question: "Qual é a 'via expressa' neural das emoções, que permite reações rápidas antes do pensamento consciente?",
+                answers: [
+                    { text: "A rota direta do tálamo para a amígdala.", correct: true },
+                    { text: "A rota do cerebelo para o córtex motor.", correct: false },
+                    { text: "A comunicação entre os dois hemisférios do cérebro.", correct: false },
+                    { text: "A medula espinhal.", correct: false }
+                ]
+            },
+            {
+                question: "A preocupação produtiva se diferencia da preocupação tóxica porque:",
+                answers: [
+                    { text: "Ela leva a um plano de ação e à solução de problemas, enquanto a tóxica é repetitiva e paralisante.", correct: true },
+                    { text: "A produtiva é sobre os outros, e a tóxica é sobre si mesmo.", correct: false },
+                    { text: "Não há diferença, toda preocupação é negativa.", correct: false },
+                    { text: "A produtiva é silenciosa e a tóxica é verbalizada.", correct: false }
+                ]
+            },
+            {
+                question: "Qual o papel do feedback na melhoria da Inteligência Emocional?",
+                answers: [
+                    { text: "É essencial, pois nos dá uma perspectiva externa sobre como nossas ações e emoções impactam os outros.", correct: true },
+                    { text: "É desnecessário, pois a IE é uma jornada puramente interna.", correct: false },
+                    { text: "É útil apenas se for 100% positivo.", correct: false },
+                    { text: "É prejudicial, pois pode gerar sentimentos negativos.", correct: false }
+                ]
+            },
+            {
+                question: "O que é 'contágio emocional'?",
+                answers: [
+                    { text: "A tendência de 'pegar' e sentir as emoções das pessoas ao nosso redor, muitas vezes de forma inconsciente.", correct: true },
+                    { text: "Uma doença que afeta a capacidade de sentir emoções.", correct: false },
+                    { text: "A manipulação intencional dos sentimentos de um grupo.", correct: false },
+                    { text: "A expressão de emoções de forma exagerada.", correct: false }
+                ]
+            },
+            {
+                question: "A habilidade de se automotivar mesmo após falhas está ligada a qual visão sobre a inteligência?",
+                answers: [
+                    { text: "A uma 'mentalidade de crescimento', que vê a habilidade como algo que pode ser desenvolvido.", correct: true },
+                    { text: "A uma 'mentalidade fixa', que acredita que a inteligência é inata.", correct: false },
+                    { text: "A crença de que o sucesso depende apenas da sorte.", correct: false },
+                    { text: "A ideia de que falhar é inaceitável.", correct: false }
+                ]
+            },
+            {
+                question: "Em relacionamentos amorosos, qual é um dos maiores preditores de divórcio, segundo a pesquisa citada por Goleman?",
+                answers: [
+                    { text: "A crítica destrutiva, o desprezo e a incapacidade de reparar discussões.", correct: true },
+                    { text: "Diferenças de gosto musical e hobbies.", correct: false },
+                    { text: "Ter discussões frequentes sobre qualquer assunto.", correct: false },
+                    { text: "A falta de interesses intelectuais em comum.", correct: false }
+                ]
+            },
+            {
+                question: "Qual o objetivo final do desenvolvimento da Inteligência Emocional?",
+                answers: [
+                    { text: "Integrar emoção e pensamento para tomar decisões mais sábias e construir relacionamentos mais saudáveis.", correct: true },
+                    { text: "Eliminar completamente as emoções negativas da vida.", correct: false },
+                    { text: "Tornar-se uma pessoa que nunca se irrita ou fica triste.", correct: false },
+                    { text: "Usar as emoções para manipular os outros e obter vantagens.", correct: false }
+                ]
+            }
         ];
 
-        const quiz = [
-            { q: "Qual das opções abaixo é um exemplo de HARDWARE?", options: ["Google Chrome", "Mouse", "Microsoft Word", "Windows"], answer: 1 },
-            { q: "Windows, Google Chrome e Microsoft Word são exemplos de qual componente de um computador?", options: ["Hardware", "Periféricos", "Software", "Placa-mãe"], answer: 2 },
-            { q: "O termo 'bug' para falhas em sistemas foi popularizado por Grace Hopper ao encontrar o quê em seu computador?", options: ["Um erro de cálculo", "Um fio solto", "Uma mariposa (inseto)", "Um vírus de computador"], answer: 2 },
-            { q: "Qual a melhor definição para 'Desenvolvimento de Sistemas'?", options: ["Apenas escrever códigos em Python", "O processo completo, do planejamento à entrega de um software", "Apenas consertar computadores", "Apenas desenhar a aparência do programa"], answer: 1 },
-            { q: "Na analogia da construção de uma casa, 'programar' seria o equivalente a:", options: ["Projetar a planta da casa", "Vender a casa", "Fabricar os tijolos", "Decorar os ambientes"], answer: 2 },
-            { q: "Qual das seguintes atividades NÃO é uma responsabilidade típica de um desenvolvedor de sistemas?", options: ["Resolver problemas com tecnologia", "Trabalhar em equipe", "Aprender constantemente", "Formatar o computador de parentes"], answer: 3 },
-            { q: "Qual a principal vantagem de um Editor de Código (como o VS Code) sobre o Bloco de Notas?", options: ["Ele já vem instalado no Windows", "Ele salva os arquivos em PDF", "Ele tem recursos como colorir o código e autocompletar", "É o único que funciona com a internet"], answer: 2 },
-            { q: "A parte de um sistema que o usuário vê e com a qual interage (telas, botões, menus) é chamada de:", options: ["Back-End", "Banco de Dados", "Front-End", "Lógica de Programação"], answer: 2 },
-            { q: "O 'cérebro' do sistema que funciona nos bastidores, processando as informações, é chamado de:", options: ["Front-End", "Interface do Usuário", "Back-End", "Sistema Operacional"], answer: 2 },
-            { q: "Onde as informações de um aplicativo, como dados de usuários e produtos, são permanentemente guardadas?", options: ["Na Memória RAM", "No Banco de Dados", "No Front-End", "No Navegador"], answer: 1 },
-            { q: "Quem é considerada uma das pioneiras da programação, ajudando a criar linguagens mais próximas do inglês?", options: ["Marie Curie", "Ada Lovelace", "Grace Hopper", "Hedy Lamarr"], answer: 2 },
-            { q: "No mercado de trabalho, qual é o papel principal de um Desenvolvedor de Sistemas?", options: ["Vender computadores", "Criar soluções para problemas reais usando tecnologia", "Fazer marketing digital", "Gerenciar redes sociais"], answer: 1 },
-            { q: "Qual das afirmações abaixo é VERDADEIRA sobre a carreira de desenvolvimento?", options: ["Você precisa ser um gênio da matemática", "É um trabalho totalmente solitário", "Aprender constantemente é essencial", "Você só precisa aprender uma linguagem de programação"], answer: 2 },
-            { q: "Qual matéria é considerada a base para 'aprender a pensar' como um programador?", options: ["Design Gráfico", "Redes de Computadores", "Lógica de Programação", "Marketing Digital"], answer: 2 },
-            { q: "Uma empresa jovem, com ambiente dinâmico e focada em crescimento rápido, é chamada de:", options: ["Consultoria", "Startup", "Multinacional", "ONG"], answer: 1 },
-            { q: "O que acontece com as informações na memória RAM quando o computador é desligado?", options: ["São salvas automaticamente", "São enviadas para a nuvem", "Elas são apagadas", "São transferidas para o HD"], answer: 2 },
-            { q: "O ENIAC, um dos primeiros computadores, era famoso por seu tamanho. Qual era sua principal função inicial?", options: ["Rodar jogos", "Cálculos balísticos militares", "Acessar a internet", "Editar textos"], answer: 1 },
-            { q: "Ada Lovelace é historicamente considerada a primeira...", options: ["Designer de computadores", "Testadora de software", "Hacker", "Programadora"], answer: 3 },
-            { q: "Se 'Desenvolvimento de Sistemas' é construir uma casa, 'Testar o software' seria como...", options: ["Escolher a cor da parede", "Verificar se as portas fecham e se não há vazamentos", "Vender a casa", "Desenhar a planta"], answer: 1 },
-            { q: "Qual etapa do desenvolvimento vem ANTES da programação (escrita do código)?", options: ["Teste final", "Manutenção", "Venda do produto", "Planejamento e análise"], answer: 3 },
-            { q: "Qual das afirmações é um MITO sobre a carreira de desenvolvedor?", options: ["É preciso aprender sempre", "É um trabalho criativo", "É preciso ser um gênio solitário que trabalha num porão", "A comunicação é importante"], answer: 2 },
-            { q: "O que é 'Syntax Highlighting' em um editor como o VS Code?", options: ["Um corretor ortográfico", "Uma ferramenta que colore o código para facilitar a leitura", "Uma função que executa o programa", "Um antivírus integrado"], answer: 1 },
-            { q: "O que é um 'IDE' (Ambiente de Desenvolvimento Integrado)?", options: ["Uma marca de computador", "Uma linguagem de programação", "Um editor de texto simples", "Um software que reúne editor, depurador e outras ferramentas"], answer: 3 },
-            { q: "Um desenvolvedor que trabalha com Front-end e Back-end é chamado de:", options: ["Designer", "Full-Stack", "Analista de QA", "Gerente de Projetos"], answer: 1 },
-            { q: "HTML, CSS e JavaScript são as três tecnologias principais de qual área?", options: ["Banco de Dados", "Back-End", "Inteligência Artificial", "Front-End"], answer: 3 },
-            { q: "Qual profissional é responsável por garantir a qualidade do software, procurando por bugs?", options: ["Desenvolvedor Back-End", "Analista de Testes (QA)", "Designer UX/UI", "Gerente de Produto"], answer: 1 },
-            { q: "Ser 'Freelancer' na área de desenvolvimento significa:", options: ["Trabalhar apenas para uma grande empresa", "Trabalhar por conta própria em diversos projetos", "Ter um cargo de gerência", "Trabalhar apenas para o governo"], answer: 1 },
-            { q: "Qual das seguintes é uma 'Soft Skill' (habilidade comportamental) muito valorizada em desenvolvedores?", options: ["Digitar rápido", "Comunicação e trabalho em equipe", "Saber formatar o Windows", "Ter o melhor computador"], answer: 1 },
-            { q: "O conjunto de regras que define como se escreve em uma linguagem de programação é chamado de:", options: ["Sintaxe", "Lógica", "Algoritmo", "Bug"], answer: 0 },
-            { q: "Qual o principal objetivo da matéria 'Banco de Dados'?", options: ["Deixar o site bonito", "Fazer o site funcionar offline", "Armazenar e gerenciar informações de forma estruturada", "Proteger o computador contra vírus"], answer: 2 }
-        ];
+        const questionElement = document.getElementById('question');
+        const answerButtonsElement = document.getElementById('answer-buttons');
+        const micoContainer = document.getElementById('mico-container');
+        const nextButton = document.getElementById('next-btn');
+        const resultsContainer = document.getElementById('results-container');
+        
+        let shuffledQuestions, currentQuestionIndex;
 
-        let current = 0;
-        let answered = false;
+        function startGame() {
+            // Embaralha as perguntas
+            shuffledQuestions = questions.sort(() => Math.random() - 0.5);
+            currentQuestionIndex = 0;
+            resultsContainer.style.display = 'none';
+            micoContainer.style.display = 'none';
+            showQuestion(shuffledQuestions[currentQuestionIndex]);
+        }
 
-        function showQuestion(index) {
-            answered = false;
-            document.getElementById("micoContainer").innerHTML = "";
-            const question = quiz[index];
-            document.getElementById("question").innerText = question.q;
-            const optionsDiv = document.getElementById("options");
-            optionsDiv.innerHTML = "";
-            question.options.forEach((opt, i) => {
-                const btn = document.createElement("button");
-                btn.innerText = opt;
-                btn.onclick = () => selectOption(btn, i === question.answer);
-                optionsDiv.appendChild(btn);
+        function showQuestion(question) {
+            resetState();
+            questionElement.innerText = question.question;
+
+            // Embaralha as respostas da pergunta atual
+            const shuffledAnswers = question.answers.sort(() => Math.random() - 0.5);
+
+            shuffledAnswers.forEach(answer => {
+                const button = document.createElement('button');
+                button.innerText = answer.text;
+                button.classList.add('btn');
+                if (answer.correct) {
+                    button.dataset.correct = answer.correct;
+                }
+                button.addEventListener('click', selectAnswer);
+                answerButtonsElement.appendChild(button);
             });
         }
 
-        function rollDice() {
-            const dice = document.getElementById("dice");
-            dice.classList.add("spin-animation");
-            dice.addEventListener("animationend", () => {
-                dice.classList.remove("spin-animation");
-            }, { once: true });
-            setTimeout(() => {
-                const result = Math.floor(Math.random() * 6) + 1;
-                document.getElementById("dice-result").innerText = `Resultado: ${result}`;
-            }, 900);
+        function resetState() {
+            micoContainer.style.display = 'none';
+            while (answerButtonsElement.firstChild) {
+                answerButtonsElement.removeChild(answerButtonsElement.firstChild);
+            }
         }
 
-        function selectOption(button, isCorrect) {
-            if (answered) return;
-            answered = true;
-            const buttons = document.querySelectorAll(".options button");
-            buttons.forEach(b => b.disabled = true);
-            if (isCorrect) {
-                button.classList.add("correct");
-                document.getElementById("micoContainer").innerHTML = "";
+        function selectAnswer(e) {
+            const selectedButton = e.target;
+            const correct = selectedButton.dataset.correct === "true";
+
+            // Aplica estilos e mostra o mico se necessário
+            if (correct) {
+                selectedButton.classList.add('correct');
+                micoContainer.style.display = 'block';
+                document.getElementById('mico-text').innerText = 'Resposta Correta!';
+                document.getElementById('mico-text').style.color = '#28a745';
             } else {
-                button.classList.add("incorrect");
-                buttons[quiz[current].answer].classList.add("correct");
-                const micoIndex = Math.floor(Math.random() * micos.length);
-                document.getElementById("micoContainer").innerHTML = `<div class='mico'>Desafio: ${micos[micoIndex]}</div>`;
+                selectedButton.classList.add('incorrect');
+                micoContainer.style.display = 'block';
+                document.getElementById('mico-text').innerText = 'Resposta errada! A equipe deve pagar um mico!';
+                document.getElementById('mico-text').style.color = '#dc3545';
             }
+
+            // Mostra qual era a resposta correta de qualquer forma
+            Array.from(answerButtonsElement.children).forEach(button => {
+                if (button.dataset.correct === "true") {
+                    button.classList.add('correct');
+                }
+                button.disabled = true; // Desabilita todos os botões
+            });
         }
 
-        function nextQuestion() {
-            if (!answered) {
-                alert("Por favor, selecione uma resposta antes de continuar.");
-                return;
+        nextButton.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < shuffledQuestions.length) {
+                showQuestion(shuffledQuestions[currentQuestionIndex]);
+            } else {
+                // Fim do quiz
+                resultsContainer.style.display = 'block';
+                micoContainer.style.display = 'none';
+                questionElement.style.display = 'none';
+                answerButtonsElement.style.display = 'none';
             }
-            current++;
-            if (current >= quiz.length) {
-                alert("Fim do quiz! Parabéns por participar. O jogo será reiniciado.");
-                current = 0;
-            }
-            showQuestion(current);
-        }
+        });
 
-        // Inicia o quiz quando a página carrega
-        showQuestion(current);
+        // Inicia o jogo quando a página carrega
+        startGame();
+
     </script>
 </body>
 
