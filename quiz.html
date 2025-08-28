@@ -22,62 +22,6 @@
             color: #333;
         }
 
-        .container { /* Novo container para a tela inicial */
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            align-items: flex-start;
-            max-width: 1200px;
-            width: 100%;
-        }
-
-        .card,
-        .image-box {
-            display: flex;
-            flex-direction: column;
-            background: white;
-            padding: 20px;
-            height: 70vh; /* Ajustado para melhor visualização */
-            border-radius: 10px;
-            flex: 1 1 300px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            justify-content: center;
-        }
-
-        .card h2 {
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-
-        .card p {
-            font-size: 16px;
-            line-height: 1.5;
-            margin-bottom: 10px;
-            text-align: left; /* Regras alinhadas à esquerda */
-        }
-        
-        .card header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .card header img.logo {
-            width: 120px;
-            margin-bottom: 10px;
-            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
-        }
-
-        .image-box img {
-            max-width: 100%;
-            max-height: 100%; /* Para a imagem se ajustar melhor */
-            width: auto;
-            height: auto;
-            border-radius: 10px;
-            object-fit: contain; /* Garante que a imagem inteira seja visível */
-        }
-
-        /* Estilos do Quiz propriamente dito */
         .quiz-container {
             width: 100%;
             max-width: 650px;
@@ -85,7 +29,6 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            display: none; /* Escondido por padrão */
         }
 
         .quiz-header {
@@ -113,7 +56,7 @@
             gap: 15px;
         }
 
-        .btn-option { /* Renomeado para evitar conflito com .btn geral */
+        .btn-option {
             background-color: #f0f0f0;
             border: 2px solid #ccc;
             border-radius: 8px;
@@ -151,17 +94,17 @@
         }
 
         #mico-text {
-            font-size: 20px; /* Um pouco menor para caber melhor */
+            font-size: 20px;
             font-weight: bold;
             color: #dc3545;
-            min-height: 50px; /* Para manter o layout estável */
+            min-height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 10px;
         }
 
-        #next-btn, #start-quiz-btn, #restart-btn {
+        #next-btn, #restart-btn {
             display: block;
             margin: 20px auto 0;
             padding: 12px 30px;
@@ -173,7 +116,7 @@
             cursor: pointer;
             transition: background-color 0.2s ease;
         }
-        #next-btn:hover, #start-quiz-btn:hover, #restart-btn:hover {
+        #next-btn:hover, #restart-btn:hover {
             background-color: #0056b3;
         }
         #restart-btn {
@@ -189,19 +132,8 @@
             color: #6a1b9a;
         }
 
-        /* Responsividade extra */
+        /* Responsividade */
         @media (max-width: 768px) {
-            .container {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .card, .image-box {
-                height: auto; /* Permite que o cartão se ajuste ao conteúdo */
-                min-height: 40vh;
-            }
-            .image-box img {
-                max-height: 30vh;
-            }
             .quiz-container {
                 padding: 20px;
             }
@@ -211,7 +143,7 @@
             .btn-option, #mico-text {
                 font-size: 14px;
             }
-            #next-btn, #start-quiz-btn, #restart-btn {
+            #next-btn, #restart-btn {
                 font-size: 16px;
                 padding: 10px 20px;
             }
@@ -220,35 +152,7 @@
 </head>
 
 <body>
-    <div id="start-screen" class="container">
-        <div class="card">
-            <header>
-                <img src="proz-logo.png" alt="Logo da Proz" class="logo">
-            </header>
-            <h2>Regras do Jogo</h2>
-            <p>
-                Cada equipe possui <strong>2 jogadores</strong>. A cada rodada, uma equipe joga o dado e avança nas
-                casas do tabuleiro.
-            </p>
-            <p>
-                Se a equipe cair em uma casa marcada, deverá responder a uma pergunta do quiz. Se
-                <strong>acertar</strong>, continua normalmente. Se <strong>errar</strong>, deverá <strong>pagar uma
-                prenda</strong>!
-            </p>
-            <p>
-                A equipe pode <strong>optar por não pagar a prenda</strong>, mas nesse caso deverá <strong>voltar ao
-                início do jogo</strong>.
-            </p>
-            <p>
-                Vence a equipe que <strong>chegar primeiro ao final</strong> do percurso!
-            </p>
-            <button id="start-quiz-btn">Começar o Quiz</button>
-        </div>
-        <div class="image-box">
-            <img src="jogo_tabuleiro.png" alt="Imagem decorativa do jogo">
-        </div>
-    </div>
-
+    
     <div id="quiz-game-container" class="quiz-container">
         <div class="quiz-header">
             <h1>Quiz: Inteligência Emocional</h1>
@@ -483,7 +387,7 @@
             {
                 question: "O que Goleman chama de 'a arte de escutar'?",
                 answers: [
-                    { text: "Prestar atenção total, entender o conteúdo emocional por trás das palavras e demonstrar essa compreensão.", correct: true },
+                    { text: "Prestar atenção total, entender o conteúdo emocional por trás das palavras e demonstrar essa comprehension.", correct: true },
                     { text: "Ficar em silêncio enquanto a outra pessoa fala.", correct: false },
                     { text: "Ouvir apenas para encontrar uma oportunidade de responder.", correct: false },
                     { text: "Concordar com tudo que a outra pessoa diz para evitar conflitos.", correct: false }
@@ -685,13 +589,9 @@
             "Seja a 'sombra' de alguém por 1 minuto, imitando seus movimentos.",
             "Narre os passos para fazer um miojo como se fosse um chef renomado.",
             "Finja que está pescando um peixe enorme no meio da sala.",
-            "Anuncie o próximo jogador como se fosse uma chamada de embarque.".
+            "Anuncie o próximo jogador como se fosse uma chamada de embarque."
         ];
 
-
-        const startScreen = document.getElementById('start-screen');
-        const quizGameContainer = document.getElementById('quiz-game-container');
-        const startQuizBtn = document.getElementById('start-quiz-btn');
 
         const questionElement = document.getElementById('question');
         const answerButtonsElement = document.getElementById('answer-buttons');
@@ -702,12 +602,6 @@
         
         let shuffledQuestions, currentQuestionIndex;
 
-        startQuizBtn.addEventListener('click', () => {
-            startScreen.style.display = 'none';
-            quizGameContainer.style.display = 'block';
-            startGame();
-        });
-
         function startGame() {
             shuffledQuestions = questions.sort(() => Math.random() - 0.5);
             currentQuestionIndex = 0;
@@ -717,14 +611,14 @@
 
         function showQuestion(question) {
             resetState();
-            questionElement.innerText = (currentQuestionIndex + 1) + ". " + question.question; // Numera a pergunta
+            questionElement.innerText = (currentQuestionIndex + 1) + ". " + question.question;
 
             const shuffledAnswers = question.answers.sort(() => Math.random() - 0.5);
 
             shuffledAnswers.forEach(answer => {
                 const button = document.createElement('button');
                 button.innerText = answer.text;
-                button.classList.add('btn-option'); // Usar a classe específica para opções
+                button.classList.add('btn-option');
                 if (answer.correct) {
                     button.dataset.correct = answer.correct;
                 }
@@ -735,20 +629,21 @@
 
         function resetState() {
             micoContainer.style.display = 'none';
-            micoText.innerText = ''; // Limpa o texto do mico
-            questionElement.style.display = 'block'; // Garante que a pergunta esteja visível
-            answerButtonsElement.style.display = 'grid'; // Garante que os botões estejam visíveis
+            micoText.innerText = '';
+            questionElement.style.display = 'block';
+            answerButtonsElement.style.display = 'grid';
 
             while (answerButtonsElement.firstChild) {
                 answerButtonsElement.removeChild(answerButtonsElement.firstChild);
             }
         }
 
+
+
         function selectAnswer(e) {
             const selectedButton = e.target;
             const correct = selectedButton.dataset.correct === "true";
 
-            // Aplica estilos
             if (correct) {
                 selectedButton.classList.add('correct');
                 micoText.innerText = 'Resposta Correta!';
@@ -756,9 +651,9 @@
             } else {
                 selectedButton.classList.add('incorrect');
                 const randomMico = micos[Math.floor(Math.random() * micos.length)];
-                micoText.innerText = `Resposta errada! Mico: ${randomMico}`;
+                micoText.innerText = `Errado! Mico: ${randomMico}`;
                 micoText.style.color = '#dc3545';
-                // Revela a resposta correta
+                
                 Array.from(answerButtonsElement.children).forEach(button => {
                     if (button.dataset.correct === "true") {
                         button.classList.add('correct');
@@ -767,7 +662,6 @@
             }
             micoContainer.style.display = 'block';
 
-            // Desabilita todos os botões
             Array.from(answerButtonsElement.children).forEach(button => {
                 button.disabled = true;
             });
@@ -778,14 +672,14 @@
             if (currentQuestionIndex < shuffledQuestions.length) {
                 showQuestion(shuffledQuestions[currentQuestionIndex]);
             } else {
-                // Fim do quiz
-                quizGameContainer.style.display = 'none'; // Esconde o quiz
-                resultsContainer.style.display = 'block'; // Mostra resultados
+                document.getElementById('quiz-game-container').style.display = 'none';
+                resultsContainer.style.display = 'block';
             }
         });
 
-        // Não inicia o jogo ao carregar a página, espera o clique no botão "Começar o Quiz"
-        // startGame(); 
+        // Inicia o jogo quando a página carrega
+        startGame();
+
     </script>
 </body>
 
