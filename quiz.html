@@ -22,6 +22,62 @@
             color: #333;
         }
 
+        .container { /* Novo container para a tela inicial */
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .card,
+        .image-box {
+            display: flex;
+            flex-direction: column;
+            background: white;
+            padding: 20px;
+            height: 70vh; /* Ajustado para melhor visualização */
+            border-radius: 10px;
+            flex: 1 1 300px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            justify-content: center;
+        }
+
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 16px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+            text-align: left; /* Regras alinhadas à esquerda */
+        }
+        
+        .card header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .card header img.logo {
+            width: 120px;
+            margin-bottom: 10px;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .image-box img {
+            max-width: 100%;
+            max-height: 100%; /* Para a imagem se ajustar melhor */
+            width: auto;
+            height: auto;
+            border-radius: 10px;
+            object-fit: contain; /* Garante que a imagem inteira seja visível */
+        }
+
+        /* Estilos do Quiz propriamente dito */
         .quiz-container {
             width: 100%;
             max-width: 650px;
@@ -29,6 +85,7 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            display: none; /* Escondido por padrão */
         }
 
         .quiz-header {
@@ -56,7 +113,7 @@
             gap: 15px;
         }
 
-        .btn {
+        .btn-option { /* Renomeado para evitar conflito com .btn geral */
             background-color: #f0f0f0;
             border: 2px solid #ccc;
             border-radius: 8px;
@@ -67,22 +124,22 @@
             transition: all 0.2s ease;
         }
 
-        .btn:hover:not(:disabled) {
+        .btn-option:hover:not(:disabled) {
             background-color: #e0e0e0;
             border-color: #999;
         }
         
-        .btn:disabled {
+        .btn-option:disabled {
             cursor: not-allowed;
         }
 
-        .btn.correct {
+        .btn-option.correct {
             background-color: #28a745;
             color: white;
             border-color: #28a745;
         }
 
-        .btn.incorrect {
+        .btn-option.incorrect {
             background-color: #dc3545;
             color: white;
             border-color: #dc3545;
@@ -94,59 +151,128 @@
         }
 
         #mico-text {
-            font-size: 22px;
+            font-size: 20px; /* Um pouco menor para caber melhor */
             font-weight: bold;
             color: #dc3545;
+            min-height: 50px; /* Para manter o layout estável */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
         }
 
-        #next-btn {
+        #next-btn, #start-quiz-btn, #restart-btn {
             display: block;
             margin: 20px auto 0;
-            padding: 10px 30px;
+            padding: 12px 30px;
             font-size: 18px;
             background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.2s ease;
         }
-        #next-btn:hover {
+        #next-btn:hover, #start-quiz-btn:hover, #restart-btn:hover {
             background-color: #0056b3;
+        }
+        #restart-btn {
+            background-color: #4caf50;
+        }
+        #restart-btn:hover {
+            background-color: #45a049;
         }
 
         #results-container h2 {
             text-align: center;
+            font-size: 28px;
+            color: #6a1b9a;
         }
 
+        /* Responsividade extra */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .card, .image-box {
+                height: auto; /* Permite que o cartão se ajuste ao conteúdo */
+                min-height: 40vh;
+            }
+            .image-box img {
+                max-height: 30vh;
+            }
+            .quiz-container {
+                padding: 20px;
+            }
+            #question {
+                font-size: 18px;
+            }
+            .btn-option, #mico-text {
+                font-size: 14px;
+            }
+            #next-btn, #start-quiz-btn, #restart-btn {
+                font-size: 16px;
+                padding: 10px 20px;
+            }
+        }
     </style>
 </head>
 
 <body>
-    <div class="quiz-container">
+    <div id="start-screen" class="container">
+        <div class="card">
+            <header>
+                <img src="proz-logo.png" alt="Logo da Proz" class="logo">
+            </header>
+            <h2>Regras do Jogo</h2>
+            <p>
+                Cada equipe possui <strong>2 jogadores</strong>. A cada rodada, uma equipe joga o dado e avança nas
+                casas do tabuleiro.
+            </p>
+            <p>
+                Se a equipe cair em uma casa marcada, deverá responder a uma pergunta do quiz. Se
+                <strong>acertar</strong>, continua normalmente. Se <strong>errar</strong>, deverá <strong>pagar uma
+                prenda</strong>!
+            </p>
+            <p>
+                A equipe pode <strong>optar por não pagar a prenda</strong>, mas nesse caso deverá <strong>voltar ao
+                início do jogo</strong>.
+            </p>
+            <p>
+                Vence a equipe que <strong>chegar primeiro ao final</strong> do percurso!
+            </p>
+            <button id="start-quiz-btn">Começar o Quiz</button>
+        </div>
+        <div class="image-box">
+            <img src="jogo_tabuleiro.png" alt="Imagem decorativa do jogo">
+        </div>
+    </div>
+
+    <div id="quiz-game-container" class="quiz-container">
         <div class="quiz-header">
             <h1>Quiz: Inteligência Emocional</h1>
         </div>
 
         <h2 id="question">Carregando pergunta...</h2>
         <div id="answer-buttons" class="btn-grid">
-            </div>
+        </div>
         
         <div id="mico-container" style="display: none;">
-            <p id="mico-text">Resposta errada! A equipe deve pagar um mico!</p>
+            <p id="mico-text"></p>
             <button id="next-btn">Próxima Pergunta</button>
         </div>
 
         <div id="results-container" style="display: none;">
             <h2>Fim de Jogo!</h2>
             <p style="text-align:center; font-size: 20px;">Parabéns à equipe vencedora!</p>
-            <button id="restart-btn" onclick="location.reload()" style="display: block; margin: 20px auto 0; padding: 10px 30px; font-size: 18px; background-color: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer;">Jogar Novamente</button>
+            <button id="restart-btn" onclick="location.reload()">Jogar Novamente</button>
         </div>
 
     </div>
 
     <script>
         const questions = [
-            // Array de 40 perguntas sobre o livro
             {
                 question: "Qual dos cinco componentes da Inteligência Emocional é a base para todos os outros, segundo Goleman?",
                 answers: [
@@ -509,34 +635,61 @@
             }
         ];
 
+        const micos = [
+            "Conte uma piada ruim.",
+            "Imite um animal de sua escolha.",
+            "Cante um trecho de uma música desafinadamente.",
+            "Dance por 10 segundos com um estilo engraçado.",
+            "Faça uma pose de super-herói ridícula.",
+            "Tente falar sem usar a letra 'A' por 15 segundos.",
+            "Descreva seu café da manhã de hoje com mímica.",
+            "Faça 5 polichinelos enquanto canta o alfabeto.",
+            "Responda à próxima pergunta usando uma voz engraçada.",
+            "Elogie a equipe adversária de uma forma criativa (e sincera!).",
+            "Mande um beijo para a câmera/público de forma exagerada.",
+            "Invente um aperto de mão secreto com um colega.",
+            "Finja que está tocando um instrumento musical por 10 segundos.",
+            "Ande em linha reta como um robô.",
+            "Faça uma cara engraçada e mantenha por 5 segundos."
+        ];
+
+
+        const startScreen = document.getElementById('start-screen');
+        const quizGameContainer = document.getElementById('quiz-game-container');
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+
         const questionElement = document.getElementById('question');
         const answerButtonsElement = document.getElementById('answer-buttons');
         const micoContainer = document.getElementById('mico-container');
+        const micoText = document.getElementById('mico-text');
         const nextButton = document.getElementById('next-btn');
         const resultsContainer = document.getElementById('results-container');
         
         let shuffledQuestions, currentQuestionIndex;
 
+        startQuizBtn.addEventListener('click', () => {
+            startScreen.style.display = 'none';
+            quizGameContainer.style.display = 'block';
+            startGame();
+        });
+
         function startGame() {
-            // Embaralha as perguntas
             shuffledQuestions = questions.sort(() => Math.random() - 0.5);
             currentQuestionIndex = 0;
             resultsContainer.style.display = 'none';
-            micoContainer.style.display = 'none';
             showQuestion(shuffledQuestions[currentQuestionIndex]);
         }
 
         function showQuestion(question) {
             resetState();
-            questionElement.innerText = question.question;
+            questionElement.innerText = (currentQuestionIndex + 1) + ". " + question.question; // Numera a pergunta
 
-            // Embaralha as respostas da pergunta atual
             const shuffledAnswers = question.answers.sort(() => Math.random() - 0.5);
 
             shuffledAnswers.forEach(answer => {
                 const button = document.createElement('button');
                 button.innerText = answer.text;
-                button.classList.add('btn');
+                button.classList.add('btn-option'); // Usar a classe específica para opções
                 if (answer.correct) {
                     button.dataset.correct = answer.correct;
                 }
@@ -547,6 +700,10 @@
 
         function resetState() {
             micoContainer.style.display = 'none';
+            micoText.innerText = ''; // Limpa o texto do mico
+            questionElement.style.display = 'block'; // Garante que a pergunta esteja visível
+            answerButtonsElement.style.display = 'grid'; // Garante que os botões estejam visíveis
+
             while (answerButtonsElement.firstChild) {
                 answerButtonsElement.removeChild(answerButtonsElement.firstChild);
             }
@@ -556,25 +713,28 @@
             const selectedButton = e.target;
             const correct = selectedButton.dataset.correct === "true";
 
-            // Aplica estilos e mostra o mico se necessário
+            // Aplica estilos
             if (correct) {
                 selectedButton.classList.add('correct');
-                micoContainer.style.display = 'block';
-                document.getElementById('mico-text').innerText = 'Resposta Correta!';
-                document.getElementById('mico-text').style.color = '#28a745';
+                micoText.innerText = 'Resposta Correta!';
+                micoText.style.color = '#28a745';
             } else {
                 selectedButton.classList.add('incorrect');
-                micoContainer.style.display = 'block';
-                document.getElementById('mico-text').innerText = 'Resposta errada! A equipe deve pagar um mico!';
-                document.getElementById('mico-text').style.color = '#dc3545';
+                const randomMico = micos[Math.floor(Math.random() * micos.length)];
+                micoText.innerText = `Resposta errada! Mico: ${randomMico}`;
+                micoText.style.color = '#dc3545';
+                // Revela a resposta correta
+                Array.from(answerButtonsElement.children).forEach(button => {
+                    if (button.dataset.correct === "true") {
+                        button.classList.add('correct');
+                    }
+                });
             }
+            micoContainer.style.display = 'block';
 
-            // Mostra qual era a resposta correta de qualquer forma
+            // Desabilita todos os botões
             Array.from(answerButtonsElement.children).forEach(button => {
-                if (button.dataset.correct === "true") {
-                    button.classList.add('correct');
-                }
-                button.disabled = true; // Desabilita todos os botões
+                button.disabled = true;
             });
         }
 
@@ -584,16 +744,13 @@
                 showQuestion(shuffledQuestions[currentQuestionIndex]);
             } else {
                 // Fim do quiz
-                resultsContainer.style.display = 'block';
-                micoContainer.style.display = 'none';
-                questionElement.style.display = 'none';
-                answerButtonsElement.style.display = 'none';
+                quizGameContainer.style.display = 'none'; // Esconde o quiz
+                resultsContainer.style.display = 'block'; // Mostra resultados
             }
         });
 
-        // Inicia o jogo quando a página carrega
-        startGame();
-
+        // Não inicia o jogo ao carregar a página, espera o clique no botão "Começar o Quiz"
+        // startGame(); 
     </script>
 </body>
 
