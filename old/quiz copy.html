@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz: Aula Inaugural de Desenvolvimento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            /* CORRIGIDO: Adicionado uma cor de fundo de emergência */
+            background-color: #2a2a3e;
+            background-image: url(fundo.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 800px;
+            width: 90%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 15px; /* Adicionado margem para espaçamento */
+        }
+
+        .options button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            text-align: left;
+        }
+
+        .options button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .correct {
+            background-color: #c8e6c9;
+            border-color: #388e3c;
+            color: #2e7d32;
+        }
+
+        .incorrect {
+            background-color: #ffcdd2;
+            border-color: #d32f2f;
+            color: #c62828;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block; /* Garante que o botão fique centralizado corretamente */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .next-btn:hover {
+            background-color: #45a049;
+        }
+
+        .mico {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 5px;
+            color: #856404;
+            font-style: italic;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin-animation {
+            animation: spin 1s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="proz-logo_branca.png" alt="Logo da Proz" class="logo">
+    </header>
+
+    <div class="card">
+        <h2>
+            <span id="question">Carregando pergunta...</span>
+            <span id="dice" title="Clique para lançar o dado" onclick="rollDice()" style="cursor: pointer; margin-left: 10px;">🎲</span>
+            <span id="dice-result" style="margin-left: 10px; font-size: 16px; color: #4caf50;"></span>
+        </h2>
+        <div class="options" id="options"></div>
+        <button class="next-btn" onclick="nextQuestion()">Próxima</button>
+        <div id="micoContainer"></div>
+    </div>
+
+    <script>
+        const micos = [
+            "Imite um animal por 10 segundos.",
+            "Ande pela sala equilibrando um caderno na cabeça.",
+            "Dance como se ninguém estivesse olhando.",
+            "Ande de costas pela sala de aula.",
+            "Desfile como se estivesse em uma passarela.",
+            "Pule com um pé só.",
+            "Abrace alguém aleatório na sala de aula."
+        ];
+
+        const quiz = [
+            { q: "Qual das opções abaixo é um exemplo de HARDWARE?", options: ["Google Chrome", "Mouse", "Microsoft Word", "Windows"], answer: 1 },
+            { q: "Windows, Google Chrome e Microsoft Word são exemplos de qual componente de um computador?", options: ["Hardware", "Periféricos", "Software", "Placa-mãe"], answer: 2 },
+            { q: "O termo 'bug' para falhas em sistemas foi popularizado por Grace Hopper ao encontrar o quê em seu computador?", options: ["Um erro de cálculo", "Um fio solto", "Uma mariposa (inseto)", "Um vírus de computador"], answer: 2 },
+            { q: "Qual a melhor definição para 'Desenvolvimento de Sistemas'?", options: ["Apenas escrever códigos em Python", "O processo completo, do planejamento à entrega de um software", "Apenas consertar computadores", "Apenas desenhar a aparência do programa"], answer: 1 },
+            { q: "Na analogia da construção de uma casa, 'programar' seria o equivalente a:", options: ["Projetar a planta da casa", "Vender a casa", "Fabricar os tijolos", "Decorar os ambientes"], answer: 2 },
+            { q: "Qual das seguintes atividades NÃO é uma responsabilidade típica de um desenvolvedor de sistemas?", options: ["Resolver problemas com tecnologia", "Trabalhar em equipe", "Aprender constantemente", "Formatar o computador de parentes"], answer: 3 },
+            { q: "Qual a principal vantagem de um Editor de Código (como o VS Code) sobre o Bloco de Notas?", options: ["Ele já vem instalado no Windows", "Ele salva os arquivos em PDF", "Ele tem recursos como colorir o código e autocompletar", "É o único que funciona com a internet"], answer: 2 },
+            { q: "A parte de um sistema que o usuário vê e com a qual interage (telas, botões, menus) é chamada de:", options: ["Back-End", "Banco de Dados", "Front-End", "Lógica de Programação"], answer: 2 },
+            { q: "O 'cérebro' do sistema que funciona nos bastidores, processando as informações, é chamado de:", options: ["Front-End", "Interface do Usuário", "Back-End", "Sistema Operacional"], answer: 2 },
+            { q: "Onde as informações de um aplicativo, como dados de usuários e produtos, são permanentemente guardadas?", options: ["Na Memória RAM", "No Banco de Dados", "No Front-End", "No Navegador"], answer: 1 },
+            { q: "Quem é considerada uma das pioneiras da programação, ajudando a criar linguagens mais próximas do inglês?", options: ["Marie Curie", "Ada Lovelace", "Grace Hopper", "Hedy Lamarr"], answer: 2 },
+            { q: "No mercado de trabalho, qual é o papel principal de um Desenvolvedor de Sistemas?", options: ["Vender computadores", "Criar soluções para problemas reais usando tecnologia", "Fazer marketing digital", "Gerenciar redes sociais"], answer: 1 },
+            { q: "Qual das afirmações abaixo é VERDADEIRA sobre a carreira de desenvolvimento?", options: ["Você precisa ser um gênio da matemática", "É um trabalho totalmente solitário", "Aprender constantemente é essencial", "Você só precisa aprender uma linguagem de programação"], answer: 2 },
+            { q: "Qual matéria é considerada a base para 'aprender a pensar' como um programador?", options: ["Design Gráfico", "Redes de Computadores", "Lógica de Programação", "Marketing Digital"], answer: 2 },
+            { q: "Uma empresa jovem, com ambiente dinâmico e focada em crescimento rápido, é chamada de:", options: ["Consultoria", "Startup", "Multinacional", "ONG"], answer: 1 },
+            { q: "O que acontece com as informações na memória RAM quando o computador é desligado?", options: ["São salvas automaticamente", "São enviadas para a nuvem", "Elas são apagadas", "São transferidas para o HD"], answer: 2 },
+            { q: "O ENIAC, um dos primeiros computadores, era famoso por seu tamanho. Qual era sua principal função inicial?", options: ["Rodar jogos", "Cálculos balísticos militares", "Acessar a internet", "Editar textos"], answer: 1 },
+            { q: "Ada Lovelace é historicamente considerada a primeira...", options: ["Designer de computadores", "Testadora de software", "Hacker", "Programadora"], answer: 3 },
+            { q: "Se 'Desenvolvimento de Sistemas' é construir uma casa, 'Testar o software' seria como...", options: ["Escolher a cor da parede", "Verificar se as portas fecham e se não há vazamentos", "Vender a casa", "Desenhar a planta"], answer: 1 },
+            { q: "Qual etapa do desenvolvimento vem ANTES da programação (escrita do código)?", options: ["Teste final", "Manutenção", "Venda do produto", "Planejamento e análise"], answer: 3 },
+            { q: "Qual das afirmações é um MITO sobre a carreira de desenvolvedor?", options: ["É preciso aprender sempre", "É um trabalho criativo", "É preciso ser um gênio solitário que trabalha num porão", "A comunicação é importante"], answer: 2 },
+            { q: "O que é 'Syntax Highlighting' em um editor como o VS Code?", options: ["Um corretor ortográfico", "Uma ferramenta que colore o código para facilitar a leitura", "Uma função que executa o programa", "Um antivírus integrado"], answer: 1 },
+            { q: "O que é um 'IDE' (Ambiente de Desenvolvimento Integrado)?", options: ["Uma marca de computador", "Uma linguagem de programação", "Um editor de texto simples", "Um software que reúne editor, depurador e outras ferramentas"], answer: 3 },
+            { q: "Um desenvolvedor que trabalha com Front-end e Back-end é chamado de:", options: ["Designer", "Full-Stack", "Analista de QA", "Gerente de Projetos"], answer: 1 },
+            { q: "HTML, CSS e JavaScript são as três tecnologias principais de qual área?", options: ["Banco de Dados", "Back-End", "Inteligência Artificial", "Front-End"], answer: 3 },
+            { q: "Qual profissional é responsável por garantir a qualidade do software, procurando por bugs?", options: ["Desenvolvedor Back-End", "Analista de Testes (QA)", "Designer UX/UI", "Gerente de Produto"], answer: 1 },
+            { q: "Ser 'Freelancer' na área de desenvolvimento significa:", options: ["Trabalhar apenas para uma grande empresa", "Trabalhar por conta própria em diversos projetos", "Ter um cargo de gerência", "Trabalhar apenas para o governo"], answer: 1 },
+            { q: "Qual das seguintes é uma 'Soft Skill' (habilidade comportamental) muito valorizada em desenvolvedores?", options: ["Digitar rápido", "Comunicação e trabalho em equipe", "Saber formatar o Windows", "Ter o melhor computador"], answer: 1 },
+            { q: "O conjunto de regras que define como se escreve em uma linguagem de programação é chamado de:", options: ["Sintaxe", "Lógica", "Algoritmo", "Bug"], answer: 0 },
+            { q: "Qual o principal objetivo da matéria 'Banco de Dados'?", options: ["Deixar o site bonito", "Fazer o site funcionar offline", "Armazenar e gerenciar informações de forma estruturada", "Proteger o computador contra vírus"], answer: 2 }
+        ];
+
+        let current = 0;
+        let answered = false;
+
+        function showQuestion(index) {
+            answered = false;
+            document.getElementById("micoContainer").innerHTML = "";
+            const question = quiz[index];
+            document.getElementById("question").innerText = question.q;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = "";
+            question.options.forEach((opt, i) => {
+                const btn = document.createElement("button");
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(btn, i === question.answer);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function rollDice() {
+            const dice = document.getElementById("dice");
+            dice.classList.add("spin-animation");
+            dice.addEventListener("animationend", () => {
+                dice.classList.remove("spin-animation");
+            }, { once: true });
+            setTimeout(() => {
+                const result = Math.floor(Math.random() * 6) + 1;
+                document.getElementById("dice-result").innerText = `Resultado: ${result}`;
+            }, 900);
+        }
+
+        function selectOption(button, isCorrect) {
+            if (answered) return;
+            answered = true;
+            const buttons = document.querySelectorAll(".options button");
+            buttons.forEach(b => b.disabled = true);
+            if (isCorrect) {
+                button.classList.add("correct");
+                document.getElementById("micoContainer").innerHTML = "";
+            } else {
+                button.classList.add("incorrect");
+                buttons[quiz[current].answer].classList.add("correct");
+                const micoIndex = Math.floor(Math.random() * micos.length);
+                document.getElementById("micoContainer").innerHTML = `<div class='mico'>Desafio: ${micos[micoIndex]}</div>`;
+            }
+        }
+
+        function nextQuestion() {
+            if (!answered) {
+                alert("Por favor, selecione uma resposta antes de continuar.");
+                return;
+            }
+            current++;
+            if (current >= quiz.length) {
+                alert("Fim do quiz! Parabéns por participar. O jogo será reiniciado.");
+                current = 0;
+            }
+            showQuestion(current);
+        }
+
+        // Inicia o quiz quando a página carrega
+        showQuestion(current);
+    </script>
+</body>
+
+</html>

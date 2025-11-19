@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz de Testes de Software</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-image: url(fundo.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        .btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <img src="proz-logo.png" alt="Logo da Proz" class="logo">
+        <h2>Regras do Jogo</h2>
+        <p>
+            Cada equipe possui <strong>2 jogadores</strong>. A cada rodada, uma equipe joga o dado e avança nas casas do tabuleiro.
+        </p>
+        <p>
+            Se a equipe cair em uma casa marcada, deverá responder a uma pergunta do quiz. Se <strong>acertar</strong>, continua normalmente. Se <strong>errar</strong>, deverá <strong>pagar uma prenda</strong>!
+        </p>
+        <p>
+            A equipe pode <strong>optar por não pagar a prenda</strong>, mas nesse caso deverá <strong>voltar ao início do jogo</strong>.
+        </p>
+        <p>
+            Vence a equipe que <strong>chegar primeiro ao final</strong> do percurso!
+        </p>
+        <button class="btn" onclick="window.location.href='quiz.html'">Começar o Jogo</button>
+    </div>
+</body>
+
+</html>

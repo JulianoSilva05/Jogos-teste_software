@@ -5,14 +5,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="icon.png">
-    <title>Quiz - Ciclo de Vida de Desenvolvimento de Sistemas</title>
+    <title>Quiz - Inteligência Emocional</title>
     <style>
-        :root {
-            --senai-red: #C8102E;
-            --senai-red-dark: #a50e24;
-            --senai-green: #2e7d32;
-            --neutral-bg: #f0f0f0;
-        }
         body {
             font-family: Arial, sans-serif;
             padding: 20px;
@@ -45,43 +39,29 @@
         }
         
         .quiz-header h1 {
-            font-size: clamp(20px, 3.5vw, 28px);
+            font-size: 24px;
             margin: 0;
         }
 
         #question {
-            font-size: clamp(18px, 3vw, 24px);
+            font-size: 22px;
             margin-bottom: 20px;
             min-height: 60px;
             text-align: center;
         }
 
-        #timer {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 12px;
-            padding: 6px 12px;
-            border: 2px solid var(--senai-red);
-            border-radius: 999px;
-            color: var(--senai-red);
-            font-weight: bold;
-            font-size: clamp(14px, 2.5vw, 16px);
-            width: fit-content;
-        }
-
         .btn-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            grid-template-columns: 1fr;
             gap: 15px;
         }
 
         .btn-option {
-            background-color: var(--neutral-bg);
+            background-color: #f0f0f0;
             border: 2px solid #ccc;
             border-radius: 8px;
-            padding: clamp(12px, 2.5vw, 16px);
-            font-size: clamp(14px, 2.5vw, 16px);
+            padding: 15px;
+            font-size: 16px;
             cursor: pointer;
             text-align: left;
             transition: all 0.2s ease;
@@ -97,15 +77,15 @@
         }
 
         .btn-option.correct {
-            background-color: var(--senai-green);
+            background-color: #28a745;
             color: white;
-            border-color: var(--senai-green);
+            border-color: #28a745;
         }
 
         .btn-option.incorrect {
-            background-color: var(--senai-red);
+            background-color: #dc3545;
             color: white;
-            border-color: var(--senai-red);
+            border-color: #dc3545;
         }
         
         #mico-container {
@@ -116,7 +96,7 @@
         #mico-text {
             font-size: 20px;
             font-weight: bold;
-            color: var(--senai-red);
+            color: #dc3545;
             min-height: 50px;
             display: flex;
             align-items: center;
@@ -127,9 +107,9 @@
         #next-btn, #restart-btn {
             display: block;
             margin: 20px auto 0;
-            padding: clamp(10px, 2.5vw, 14px) clamp(20px, 4vw, 30px);
-            font-size: clamp(16px, 2.8vw, 18px);
-            background-color: var(--senai-red);
+            padding: 12px 30px;
+            font-size: 18px;
+            background-color: #007bff;
             color: white;
             border: none;
             border-radius: 5px;
@@ -137,14 +117,19 @@
             transition: background-color 0.2s ease;
         }
         #next-btn:hover, #restart-btn:hover {
-            background-color: var(--senai-red-dark);
+            background-color: #0056b3;
         }
-        /* Unifica botões na paleta SENAI */
+        #restart-btn {
+            background-color: #4caf50;
+        }
+        #restart-btn:hover {
+            background-color: #45a049;
+        }
 
         #results-container h2 {
             text-align: center;
             font-size: 28px;
-            color: var(--senai-red);
+            color: #6a1b9a;
         }
 
         /* Responsividade */
@@ -163,12 +148,6 @@
                 padding: 10px 20px;
             }
         }
-
-        @media (max-width: 480px) {
-            .quiz-container { padding: 16px; }
-            .btn-grid { gap: 12px; }
-            #results-container h2 { font-size: 24px; }
-        }
     </style>
 </head>
 
@@ -176,10 +155,8 @@
     
     <div id="quiz-game-container" class="quiz-container">
         <div class="quiz-header">
-            <h1>Quiz: Ciclo de Vida de Desenvolvimento de Sistemas</h1>
+            <h1>Quiz: Inteligência Emocional</h1>
         </div>
-
-        <div id="timer">Tempo: 30s</div>
 
         <h2 id="question">Carregando pergunta...</h2>
         <div id="answer-buttons" class="btn-grid">
@@ -562,373 +539,6 @@
             }
         ];
 
-        // Substitui o conjunto de perguntas pelo novo conjunto fornecido
-        const newQuestions = [
-            {
-                question: "Qual é a primeira fase fundamental do Ciclo de Vida de Desenvolvimento de Sistemas (SDLC)?",
-                answers: [
-                    { text: "Planejamento e Análise de Requisitos", correct: true },
-                    { text: "Codificação", correct: false },
-                    { text: "Testes", correct: false },
-                    { text: "Implantação", correct: false }
-                ]
-            },
-            {
-                question: "O que é o modelo 'Cascata' (Waterfall) no desenvolvimento de software?",
-                answers: [
-                    { text: "Um modelo linear e sequencial onde cada fase deve ser concluída antes da próxima começar.", correct: true },
-                    { text: "Um modelo iterativo focado em entregas rápidas e pequenas.", correct: false },
-                    { text: "Uma abordagem baseada em prototipagem rápida sem documentação.", correct: false },
-                    { text: "Um método focado exclusivamente em testes automatizados.", correct: false }
-                ]
-            },
-            {
-                question: "Qual fase do SDLC envolve a tradução do design do sistema em código de programação?",
-                answers: [
-                    { text: "Implementação ou Codificação", correct: true },
-                    { text: "Análise de Requisitos", correct: false },
-                    { text: "Design do Sistema", correct: false },
-                    { text: "Manutenção", correct: false }
-                ]
-            },
-            {
-                question: "O que caracteriza o modelo Ágil (Agile)?",
-                answers: [
-                    { text: "Desenvolvimento iterativo e incremental, com foco na colaboração e resposta a mudanças.", correct: true },
-                    { text: "Documentação extensiva e processos rígidos.", correct: false },
-                    { text: "Ausência total de planejamento.", correct: false },
-                    { text: "Foco exclusivo na negociação de contratos.", correct: false }
-                ]
-            },
-            {
-                question: "Qual é o principal objetivo da fase de 'Testes'?",
-                answers: [
-                    { text: "Verificar se o sistema atende aos requisitos e identificar defeitos (bugs).", correct: true },
-                    { text: "Escrever o código fonte do sistema.", correct: false },
-                    { text: "Definir o orçamento do projeto.", correct: false },
-                    { text: "Treinar os usuários finais.", correct: false }
-                ]
-            },
-            {
-                question: "O que é um 'Requisito Funcional'?",
-                answers: [
-                    { text: "Uma descrição do que o sistema deve fazer, suas funções e comportamentos.", correct: true },
-                    { text: "Uma restrição sobre como o sistema deve ser construído (ex: linguagem, desempenho).", correct: false },
-                    { text: "O custo total do projeto.", correct: false },
-                    { text: "O cronograma de férias da equipe.", correct: false }
-                ]
-            },
-            {
-                question: "No modelo em V (V-Model), o que acontece paralelamente à fase de codificação?",
-                answers: [
-                    { text: "Nada, é um modelo sequencial puro.", correct: false },
-                    { text: "A execução dos Testes Unitários.", correct: true },
-                    { text: "A Análise de Requisitos.", correct: false },
-                    { text: "O Design de Alto Nível.", correct: false }
-                ]
-            },
-            {
-                question: "Qual tipo de manutenção envolve corrigir erros que surgem após o sistema estar em produção?",
-                answers: [
-                    { text: "Manutenção Corretiva", correct: true },
-                    { text: "Manutenção Adaptativa", correct: false },
-                    { text: "Manutenção Perfectiva", correct: false },
-                    { text: "Manutenção Preventiva", correct: false }
-                ]
-            },
-            {
-                question: "O que é um Estudo de Viabilidade?",
-                answers: [
-                    { text: "Uma análise para determinar se o projeto é técnica, econômica e operacionalmente possível.", correct: true },
-                    { text: "O teste final antes da entrega ao cliente.", correct: false },
-                    { text: "A escolha da linguagem de programação.", correct: false },
-                    { text: "A criação do manual do usuário.", correct: false }
-                ]
-            },
-            {
-                question: "Qual é a principal característica do modelo Espiral?",
-                answers: [
-                    { text: "Foco na análise e gerenciamento de riscos em ciclos iterativos.", correct: true },
-                    { text: "Simplicidade e linearidade.", correct: false },
-                    { text: "Ausência de protótipos.", correct: false },
-                    { text: "Ser usado apenas para projetos pequenos.", correct: false }
-                ]
-            },
-            {
-                question: "O que são Testes de Aceitação do Usuário (UAT)?",
-                answers: [
-                    { text: "Testes realizados pelos usuários finais para verificar se o sistema atende às suas necessidades reais.", correct: true },
-                    { text: "Testes realizados pelos desenvolvedores em componentes isolados.", correct: false },
-                    { text: "Testes de carga para verificar a robustez do servidor.", correct: false },
-                    { text: "Testes de segurança contra hackers.", correct: false }
-                ]
-            },
-            {
-                question: "O que significa a sigla MVP no contexto de desenvolvimento de produtos?",
-                answers: [
-                    { text: "Minimum Viable Product (Produto Mínimo Viável)", correct: true },
-                    { text: "Maximum Value Product (Produto de Valor Máximo)", correct: false },
-                    { text: "Most Valuable Programmer (Programador Mais Valioso)", correct: false },
-                    { text: "Minimum Verified Process (Processo Mínimo Verificado)", correct: false }
-                ]
-            },
-            {
-                question: "Na metodologia Scrum, o que é um 'Sprint'?",
-                answers: [
-                    { text: "Um período de tempo fixo (time-box) durante o qual um incremento de produto é criado.", correct: true },
-                    { text: "Uma reunião diária de 15 minutos.", correct: false },
-                    { text: "A lista de todos os requisitos do projeto.", correct: false },
-                    { text: "O líder da equipe de desenvolvimento.", correct: false }
-                ]
-            },
-            {
-                question: "Qual documento é tipicamente produzido ao final da fase de Análise?",
-                answers: [
-                    { text: "Especificação de Requisitos de Software (SRS)", correct: true },
-                    { text: "Manual do Usuário", correct: false },
-                    { text: "Código Fonte", correct: false },
-                    { text: "Plano de Testes", correct: false }
-                ]
-            },
-            {
-                question: "O que diferencia a Manutenção Adaptativa da Corretiva?",
-                answers: [
-                    { text: "A Adaptativa ajusta o sistema a mudanças no ambiente (ex: novo SO), a Corretiva conserta bugs.", correct: true },
-                    { text: "A Adaptativa melhora a performance, a Corretiva adiciona novas funções.", correct: false },
-                    { text: "Não há diferença, são sinônimos.", correct: false },
-                    { text: "A Adaptativa é feita antes do lançamento, a Corretiva depois.", correct: false }
-                ]
-            },
-            {
-                question: "O que é 'Deploy' ou Implantação?",
-                answers: [
-                    { text: "O processo de disponibilizar o sistema para uso em um ambiente de produção.", correct: true },
-                    { text: "A exclusão de arquivos antigos do servidor.", correct: false },
-                    { text: "A fase de design de interfaces.", correct: false },
-                    { text: "A contratação de novos desenvolvedores.", correct: false }
-                ]
-            },
-            {
-                question: "Qual teste verifica a interação entre diferentes módulos ou componentes do sistema?",
-                answers: [
-                    { text: "Teste de Integração", correct: true },
-                    { text: "Teste Unitário", correct: false },
-                    { text: "Teste de Usabilidade", correct: false },
-                    { text: "Teste de Regressão", correct: false }
-                ]
-            },
-            {
-                question: "O que é um Diagrama de Caso de Uso?",
-                answers: [
-                    { text: "Uma representação visual das interações entre usuários (atores) e o sistema.", correct: true },
-                    { text: "Um fluxograma do código fonte.", correct: false },
-                    { text: "Um diagrama de banco de dados.", correct: false },
-                    { text: "Um cronograma do projeto.", correct: false }
-                ]
-            },
-            {
-                question: "Qual é a função do 'Product Owner' no Scrum?",
-                answers: [
-                    { text: "Maximizar o valor do produto e gerenciar o Backlog do Produto.", correct: true },
-                    { text: "Gerenciar a equipe e atribuir tarefas diariamente.", correct: false },
-                    { text: "Escrever o código e testar o software.", correct: false },
-                    { text: "Resolver impedimentos técnicos da equipe.", correct: false }
-                ]
-            },
-            {
-                question: "O que é DevOps?",
-                answers: [
-                    { text: "Um conjunto de práticas que une desenvolvimento (Dev) e operações (Ops) para encurtar o ciclo de desenvolvimento.", correct: true },
-                    { text: "Uma linguagem de programação moderna.", correct: false },
-                    { text: "Um tipo de servidor de banco de dados.", correct: false },
-                    { text: "Uma ferramenta de design gráfico.", correct: false }
-                ]
-            },
-            {
-                question: "O que é 'Escopo' de um projeto?",
-                answers: [
-                    { text: "A definição de tudo o que deve ser entregue e realizado no projeto.", correct: true },
-                    { text: "O prazo final do projeto.", correct: false },
-                    { text: "O custo dos equipamentos.", correct: false },
-                    { text: "A lista de funcionários da empresa.", correct: false }
-                ]
-            },
-            {
-                question: "Qual é o objetivo da 'Prototipagem'?",
-                answers: [
-                    { text: "Criar uma versão preliminar do sistema para visualizar e validar requisitos com o usuário.", correct: true },
-                    { text: "Entregar o produto final mais rápido sem testes.", correct: false },
-                    { text: "Substituir a fase de codificação.", correct: false },
-                    { text: "Criar a documentação final do sistema.", correct: false }
-                ]
-            },
-            {
-                question: "O que é um Teste de Regressão?",
-                answers: [
-                    { text: "Teste realizado para garantir que novas alterações não quebraram funcionalidades já existentes.", correct: true },
-                    { text: "Teste realizado apenas na primeira versão do software.", correct: false },
-                    { text: "Teste focado na estética da interface.", correct: false },
-                    { text: "Teste para verificar a segurança de senhas.", correct: false }
-                ]
-            },
-            {
-                question: "O que são Requisitos Não-Funcionais?",
-                answers: [
-                    { text: "Critérios de qualidade como desempenho, segurança, usabilidade e confiabilidade.", correct: true },
-                    { text: "As funcionalidades principais do sistema (ex: login, cadastro).", correct: false },
-                    { text: "Requisitos que não precisam ser implementados.", correct: false },
-                    { text: "Requisitos definidos pela equipe de marketing.", correct: false }
-                ]
-            },
-            {
-                question: "No contexto de banco de dados, o que é a fase de Design Lógico?",
-                answers: [
-                    { text: "A definição da estrutura de dados (tabelas, relacionamentos) independente do SGBD específico.", correct: true },
-                    { text: "A instalação do software de banco de dados.", correct: false },
-                    { text: "A compra dos servidores físicos.", correct: false },
-                    { text: "A criação de backups.", correct: false }
-                ]
-            },
-            {
-                question: "O que é Kanban?",
-                answers: [
-                    { text: "Um método visual para gerenciar o fluxo de trabalho, limitando o trabalho em progresso.", correct: true },
-                    { text: "Uma linguagem de script para automação.", correct: false },
-                    { text: "Um tipo de teste de software.", correct: false },
-                    { text: "Um documento de requisitos.", correct: false }
-                ]
-            },
-            {
-                question: "O que significa CI/CD?",
-                answers: [
-                    { text: "Integração Contínua e Entrega/Implantação Contínua.", correct: true },
-                    { text: "Código Interno e Código Distribuído.", correct: false },
-                    { text: "Comunicação Inteligente e Controle de Dados.", correct: false },
-                    { text: "Correção Imediata e Codificação Direta.", correct: false }
-                ]
-            },
-            {
-                question: "Qual é o papel do Scrum Master?",
-                answers: [
-                    { text: "Facilitar o processo Scrum e remover impedimentos que atrapalham a equipe.", correct: true },
-                    { text: "Gerenciar o projeto e definir prazos.", correct: false },
-                    { text: "Demitir e contratar desenvolvedores.", correct: false },
-                    { text: "Definir quais recursos o produto terá.", correct: false }
-                ]
-            },
-            {
-                question: "O que é 'Refatoração' (Refactoring)?",
-                answers: [
-                    { text: "O processo de reestruturar o código existente sem alterar seu comportamento externo.", correct: true },
-                    { text: "Reescrever todo o sistema do zero.", correct: false },
-                    { text: "Adicionar novas funcionalidades ao sistema.", correct: false },
-                    { text: "Corrigir bugs reportados pelos usuários.", correct: false }
-                ]
-            },
-            {
-                question: "Na fase de Design, qual é a diferença entre Design de Alto Nível (HLD) e Baixo Nível (LLD)?",
-                answers: [
-                    { text: "HLD foca na arquitetura geral e módulos; LLD detalha a lógica de cada componente.", correct: true },
-                    { text: "HLD é para gerentes; LLD é para clientes.", correct: false },
-                    { text: "HLD usa código; LLD usa diagramas.", correct: false },
-                    { text: "Não há diferença, são a mesma coisa.", correct: false }
-                ]
-            },
-            {
-                question: "O que é 'Stakeholder' em um projeto de software?",
-                answers: [
-                    { text: "Qualquer pessoa ou grupo que tenha interesse ou seja afetado pelo projeto.", correct: true },
-                    { text: "Apenas os investidores financeiros.", correct: false },
-                    { text: "Apenas os desenvolvedores.", correct: false },
-                    { text: "O concorrente da empresa.", correct: false }
-                ]
-            },
-            {
-                question: "Qual é a principal desvantagem do modelo Cascata?",
-                answers: [
-                    { text: "Dificuldade em acomodar mudanças nos requisitos após o início do projeto.", correct: true },
-                    { text: "Falta de documentação.", correct: false },
-                    { text: "Exige programadores muito experientes.", correct: false },
-                    { text: "É muito rápido e pode pular etapas importantes.", correct: false }
-                ]
-            },
-            {
-                question: "O que é Manutenção Perfectiva?",
-                answers: [
-                    { text: "Modificações para melhorar o desempenho ou a manutenibilidade do sistema.", correct: true },
-                    { text: "Correção de erros críticos.", correct: false },
-                    { text: "Adaptação a novas leis.", correct: false },
-                    { text: "Backup diário dos dados.", correct: false }
-                ]
-            },
-            {
-                question: "O que é uma 'User Story' (História de Usuário)?",
-                answers: [
-                    { text: "Uma descrição simples de uma funcionalidade do ponto de vista do usuário final.", correct: true },
-                    { text: "Um relatório de erro técnico.", correct: false },
-                    { text: "A biografia do criador do sistema.", correct: false },
-                    { text: "Um diagrama de arquitetura de servidor.", correct: false }
-                ]
-            },
-            {
-                question: "O que é Teste de Caixa Preta?",
-                answers: [
-                    { text: "Teste funcional onde o testador não conhece a estrutura interna (código) do sistema.", correct: true },
-                    { text: "Teste onde o testador analisa o código fonte linha por linha.", correct: false },
-                    { text: "Teste realizado com o monitor desligado.", correct: false },
-                    { text: "Teste de hardware.", correct: false }
-                ]
-            },
-            {
-                question: "O que é Teste de Caixa Branca?",
-                answers: [
-                    { text: "Teste estrutural onde o testador tem conhecimento e acesso ao código interno e lógica do sistema.", correct: true },
-                    { text: "Teste realizado apenas pela equipe de design.", correct: false },
-                    { text: "Teste que foca apenas na interface do usuário.", correct: false },
-                    { text: "Teste de aceitação do cliente.", correct: false }
-                ]
-            },
-            {
-                question: "Qual a importância da Documentação no SDLC?",
-                answers: [
-                    { text: "Garantir a rastreabilidade, facilitar a manutenção futura e o treinamento de novos membros.", correct: true },
-                    { text: "Apenas para burocratizar o processo.", correct: false },
-                    { text: "Não é importante em metodologias ágeis.", correct: false },
-                    { text: "Serve apenas para auditorias fiscais.", correct: false }
-                ]
-            },
-            {
-                question: "O que é RAD (Rapid Application Development)?",
-                answers: [
-                    { text: "Uma metodologia que prioriza prototipagem rápida e feedback interativo sobre planejamento longo.", correct: true },
-                    { text: "Um tipo de radiação usada em servidores.", correct: false },
-                    { text: "Um protocolo de rede.", correct: false },
-                    { text: "Um modelo de banco de dados relacional.", correct: false }
-                ]
-            },
-            {
-                question: "Quando ocorre o 'Fim da Vida Útil' (End-of-Life) de um sistema?",
-                answers: [
-                    { text: "Quando o sistema não é mais suportado, atualizado ou útil para a organização, sendo desativado.", correct: true },
-                    { text: "Assim que ele é lançado.", correct: false },
-                    { text: "Quando ocorre o primeiro bug.", correct: false },
-                    { text: "Quando o desenvolvedor principal sai da empresa.", correct: false }
-                ]
-            },
-            {
-                question: "O que é Git?",
-                answers: [
-                    { text: "Um sistema de controle de versão distribuído usado para rastrear mudanças no código fonte.", correct: true },
-                    { text: "Uma linguagem de programação.", correct: false },
-                    { text: "Um ambiente de desenvolvimento integrado (IDE).", correct: false },
-                    { text: "Um servidor de hospedagem de sites.", correct: false }
-                ]
-            }
-        ];
-
-        // Aplica substituição mantendo a mesma variável usada pelo jogo
-        questions.splice(0, questions.length, ...newQuestions);
-
         const micos = [
             "Imitar um gato por 30 segundos, miando e se limpando com as 'patas'.",
             "Cante 'Parabéns pra Você' em tom de ópera, com muita dramaticidade.",
@@ -989,11 +599,8 @@
         const micoText = document.getElementById('mico-text');
         const nextButton = document.getElementById('next-btn');
         const resultsContainer = document.getElementById('results-container');
-        const timerElement = document.getElementById('timer');
         
         let shuffledQuestions, currentQuestionIndex;
-        let timerInterval = null;
-        let timeLeft = 30;
 
         function startGame() {
             shuffledQuestions = questions.sort(() => Math.random() - 0.5);
@@ -1018,8 +625,6 @@
                 button.addEventListener('click', selectAnswer);
                 answerButtonsElement.appendChild(button);
             });
-
-            startTimer();
         }
 
         function resetState() {
@@ -1031,19 +636,11 @@
             while (answerButtonsElement.firstChild) {
                 answerButtonsElement.removeChild(answerButtonsElement.firstChild);
             }
-
-            // Reset do timer visual e cancelamento de intervalo anterior
-            if (timerInterval) clearInterval(timerInterval);
-            timeLeft = 30;
-            if (timerElement) timerElement.innerText = `Tempo: ${timeLeft}s`;
         }
 
 
 
         function selectAnswer(e) {
-            // Cancelar o timer ao responder
-            if (timerInterval) clearInterval(timerInterval);
-
             const selectedButton = e.target;
             const correct = selectedButton.dataset.correct === "true";
 
@@ -1063,40 +660,6 @@
                     }
                 });
             }
-            micoContainer.style.display = 'block';
-
-            Array.from(answerButtonsElement.children).forEach(button => {
-                button.disabled = true;
-            });
-        }
-
-        function updateTimer() {
-            if (timerElement) timerElement.innerText = `Tempo: ${timeLeft}s`;
-        }
-
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            timeLeft = 30;
-            updateTimer();
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                updateTimer();
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    handleTimeout();
-                }
-            }, 1000);
-        }
-
-        function handleTimeout() {
-            // Destacar a resposta correta e aplicar penalidade (mico) por não responder no tempo
-            const correctButton = Array.from(answerButtonsElement.children).find(btn => btn.dataset.correct === "true");
-            if (correctButton) {
-                correctButton.classList.add('correct');
-            }
-            const randomMico = micos[Math.floor(Math.random() * micos.length)];
-            micoText.innerText = `Tempo esgotado! Mico: ${randomMico}`;
-            micoText.style.color = 'var(--senai-red)';
             micoContainer.style.display = 'block';
 
             Array.from(answerButtonsElement.children).forEach(button => {

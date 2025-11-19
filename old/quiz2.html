@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz de Testes de Software</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 0;
+            background-image: url(fundo.png);
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+            filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 600px;
+            width: 80%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            font-size: 20px;
+        }
+
+        .options button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            text-align: left;
+        }
+
+        .options button:hover {
+            background-color: #f0f0f0;
+        }
+
+        .correct {
+            background-color: #c8e6c9;
+            border-color: #388e3c;
+            color: #2e7d32;
+        }
+
+        .incorrect {
+            background-color: #ffcdd2;
+            border-color: #d32f2f;
+            color: #c62828;
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .next-btn:hover {
+            background-color: #45a049;
+        }
+
+        .mico {
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            border-radius: 5px;
+            color: #856404;
+            font-style: italic;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .spin-animation {
+            animation: spin 1s ease-in-out;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <img src="proz-logo_branca.png" alt="Logo da Proz" class="logo">
+    </header>
+    <div class="card">
+        <h2>
+            <span id="question">Carregando pergunta...</span>
+            <span id="dice" title="Clique para lançar o dado" onclick="rollDice()"
+                style="cursor: pointer; margin-left: 10px;">🎲</span>
+            <span id="dice-result" style="margin-left: 10px; font-size: 16px; color: #4caf50;"></span>
+        </h2>
+        <div class="options" id="options"></div>
+        <button class="next-btn" onclick="nextQuestion()">Próxima</button>
+        <div id="micoContainer"></div>
+    </div>
+
+    <script>
+        const micos = [
+            "Imitar um cantor famoso — cante um refrão exagerando nos trejeitos do artista.",
+            "Desfile de passarela improvisado — faça poses fashion no meio da sala, com direito a cara de modelo.",
+            "Sapateiro maluco — finja que está martelando sapatos no ritmo de uma música imaginária por 15 segundos.",
+            "Robô descarregado — ande como um robô travando e desligando até chegar ao ponto combinado.",
+            "Locutor de futebol épico — narre qualquer coisa à sua volta (até o ventilador) como se fosse a final da Copa.",
+            "Dublagem dramática — escolha alguém na roda e dublar todos os movimentos dele por 30 segundos, como num filme.",
+            "Estátua que espirra — fique parado feito estátua, mas dê um espirro cinematográfico a cada 5 segundos.",
+            "Dança do quadrado invisível — dance preso dentro de um “quadrado” minúsculo, sem sair da linha imaginária.",
+            "Pinguim equilibrista — caminhe segurando um livro na cabeça e batendo “asas” com os braços.",
+            "Rap da vida cotidiana — crie um rap freestyle sobre algo banal (lavar louça, pegar ônibus) em 20 segundos."
+        ];
+
+        const quiz = [
+            {
+                q: "Por que a qualidade do software é importante para a satisfação do cliente?",
+                options: [
+                    "Porque reduz o custo de desenvolvimento.",
+                    "Porque permite lançar o produto mais rapidamente.",
+                    "Porque garante que o software atenda às expectativas do cliente.",
+                    "Porque elimina a necessidade de testes."
+                ],
+                answer: 2
+            },
+            {
+                q: "Qual é o objetivo do teste de usabilidade?",
+                options: [
+                    "Verificar a performance do sistema.",
+                    "Medir a segurança do software.",
+                    "Avaliar a facilidade de uso para o usuário final.",
+                    "Encontrar falhas no código-fonte."
+                ],
+                answer: 2
+            },
+            {
+                q: "Para que serve entender o Ciclo de Vida do Desenvolvimento de Software?",
+                options: [
+                    "Para escolher a linguagem de programação.",
+                    "Para evitar testes.",
+                    "Para planejar, desenvolver e manter o software com qualidade.",
+                    "Para desenvolver hardware."
+                ],
+                answer: 2
+            },
+            {
+                q: "Qual o propósito da norma IEEE-829 em testes de software?",
+                options: [
+                    "Definir padrões de codificação.",
+                    "Gerenciar requisitos de negócios.",
+                    "Padronizar documentos de teste.",
+                    "Organizar equipes de desenvolvimento."
+                ],
+                answer: 2
+            },
+            {
+                q: "Quais são três benefícios da virtualização para empresas?",
+                options: [
+                    "Menor segurança, maior consumo de energia, menos flexibilidade.",
+                    "Custo elevado, menor escalabilidade, alta complexidade.",
+                    "Melhor uso de recursos, economia de custos, maior flexibilidade.",
+                    "Dependência de hardware, aumento de falhas, menor desempenho."
+                ],
+                answer: 2
+            },
+            {
+                q: "Qual a principal diferença entre Teste Funcional e Estrutural?",
+                options: [
+                    "Teste funcional verifica comportamento, estrutural verifica código.",
+                    "Teste funcional é automatizado, estrutural é manual.",
+                    "Teste funcional é feito só no início, estrutural só no final.",
+                    "Não há diferença entre eles."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é qualidade de software?",
+                options: [
+                    "Quantidade de linhas de código.",
+                    "Conformidade com requisitos e satisfação do usuário.",
+                    "Velocidade de execução do software.",
+                    "Número de erros encontrados."
+                ],
+                answer: 1
+            },
+            {
+                q: "Qual a diferença entre defeito e falha em software?",
+                options: [
+                    "Defeito é erro no código, falha é problema na execução.",
+                    "Defeito é o mesmo que falha.",
+                    "Falha ocorre antes do defeito.",
+                    "Defeito é causado por falha no hardware."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é um caso de teste?",
+                options: [
+                    "Um documento que descreve condições para testar uma funcionalidade.",
+                    "Um tipo de erro no software.",
+                    "Um relatório de bugs.",
+                    "Uma ferramenta de automação."
+                ],
+                answer: 0
+            },
+            {
+                q: "Para que serve um plano de testes?",
+                options: [
+                    "Organizar e definir como os testes serão realizados.",
+                    "Desenvolver código.",
+                    "Gerar relatórios de erros.",
+                    "Controlar versões do software."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é teste de regressão?",
+                options: [
+                    "Teste feito para verificar se mudanças não quebraram funcionalidades existentes.",
+                    "Teste feito apenas no início do projeto.",
+                    "Teste que não precisa ser repetido.",
+                    "Teste para melhorar a performance."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é automação de testes?",
+                options: [
+                    "Processo de escrever código para executar testes automaticamente.",
+                    "Teste feito manualmente.",
+                    "Relatório de bugs.",
+                    "Ferramenta para versionar código."
+                ],
+                answer: 0
+            },
+            {
+                q: "Quando usar testes manuais em vez de automatizados?",
+                options: [
+                    "Quando o teste é simples e será repetido muitas vezes.",
+                    "Quando o teste é exploratório e exige julgamento humano.",
+                    "Quando não se tem tempo.",
+                    "Quando o código está perfeito."
+                ],
+                answer: 1
+            },
+            {
+                q: "O que são critérios de aceitação?",
+                options: [
+                    "Condições que um software deve cumprir para ser aceito pelo cliente.",
+                    "Erros encontrados no software.",
+                    "Ferramentas de teste.",
+                    "Relatórios de bugs."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é TDD (Test-Driven Development)?",
+                options: [
+                    "Desenvolvimento baseado na escrita de testes antes do código.",
+                    "Teste feito após a entrega do software.",
+                    "Automação de testes sem código.",
+                    "Testes feitos por usuário final."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que são testes de integração?",
+                options: [
+                    "Testes que verificam a interação entre diferentes módulos do sistema.",
+                    "Testes feitos só em uma parte do sistema.",
+                    "Testes de usabilidade.",
+                    "Testes de performance."
+                ],
+                answer: 0
+            },
+            {
+                q: "Qual o papel do QA (Quality Assurance) em um time ágil?",
+                options: [
+                    "Garantir qualidade e colaborar com o time para prevenir erros.",
+                    "Escrever código apenas.",
+                    "Gerenciar equipe de vendas.",
+                    "Só fazer testes manuais."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é cobertura de código?",
+                options: [
+                    "Percentual de código executado durante testes.",
+                    "Quantidade de linhas escritas.",
+                    "Número de bugs encontrados.",
+                    "Tempo gasto no desenvolvimento."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é teste de carga?",
+                options: [
+                    "Teste que verifica o comportamento do sistema sob alta demanda.",
+                    "Teste de segurança.",
+                    "Teste de usabilidade.",
+                    "Teste funcional."
+                ],
+                answer: 0
+            },
+            {
+                q: "Por que é importante documentar os testes?",
+                options: [
+                    "Para rastrear o que foi testado e facilitar futuras manutenções.",
+                    "Para aumentar o número de páginas do projeto.",
+                    "Para evitar fazer testes.",
+                    "Não é importante documentar."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que é um relatório de bug?",
+                options: [
+                    "Documento que descreve um problema encontrado no software.",
+                    "Uma ferramenta de teste.",
+                    "Um tipo de teste manual.",
+                    "Um código fonte."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que são ferramentas de controle de versão?",
+                options: [
+                    "Softwares que ajudam a gerenciar mudanças no código-fonte.",
+                    "Ferramentas para editar texto.",
+                    "Programas para design gráfico.",
+                    "Plataformas de redes sociais."
+                ],
+                answer: 0
+            },
+            {
+                q: "O que são métricas de qualidade de software?",
+                options: [
+                    "Medidas usadas para avaliar atributos do software.",
+                    "Quantidade de usuários.",
+                    "Número de desenvolvedores.",
+                    "Ferramentas de automação."
+                ],
+                answer: 0
+            },
+            {
+                q: "Como o feedback do usuário ajuda na melhoria da qualidade?",
+                options: [
+                    "Ajuda a identificar problemas reais e necessidades para melhorias.",
+                    "Não ajuda em nada.",
+                    "Atrasa o desenvolvimento.",
+                    "É usado só para marketing."
+                ],
+                answer: 0
+            },
+            {
+                q: "É possível testar tudo? Justifique.",
+                options: [
+                    "Não, por limitações de tempo e recursos; deve-se priorizar o que é mais importante.",
+                    "Sim, tudo pode ser testado.",
+                    "Não é necessário testar.",
+                    "Sim, mas só em projetos pequenos."
+                ],
+                answer: 0
+            }
+        ];
+
+        let current = 0;
+        let answered = false;
+
+        function showQuestion(index) {
+            answered = false;
+            document.getElementById("micoContainer").innerHTML = "";
+            const question = quiz[index];
+            document.getElementById("question").innerText = question.q;
+            const optionsDiv = document.getElementById("options");
+            optionsDiv.innerHTML = "";
+            question.options.forEach((opt, i) => {
+                const btn = document.createElement("button");
+                btn.innerText = opt;
+                btn.onclick = () => selectOption(btn, i === question.answer);
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function rollDice() {
+            const dice = document.getElementById("dice");
+
+            // Adiciona a classe de animação
+            dice.classList.add("spin-animation");
+
+            // Depois que a animação terminar (1s), remove a classe para permitir nova animação
+            dice.addEventListener("animationend", () => {
+                dice.classList.remove("spin-animation");
+            }, { once: true });
+
+            // Gera o número aleatório e mostra o resultado com delay para combinar com a animação
+            setTimeout(() => {
+                const result = Math.floor(Math.random() * 6) + 1;
+                document.getElementById("dice-result").innerText = `Resultado: ${result}`;
+            }, 900); // Mostra pouco antes de terminar o giro
+        }
+
+
+        function selectOption(button, isCorrect) {
+            if (answered) return;
+            answered = true;
+            const buttons = document.querySelectorAll(".options button");
+            buttons.forEach(b => b.disabled = true);
+            if (isCorrect) {
+                button.classList.add("correct");
+                document.getElementById("micoContainer").innerHTML = "";
+            } else {
+                button.classList.add("incorrect");
+                buttons[quiz[current].answer].classList.add("correct");
+                const micoIndex = Math.floor(Math.random() * micos.length);
+                document.getElementById("micoContainer").innerHTML = `<div class="mico">Desafio: ${micos[micoIndex]}</div>`;
+            }
+        }
+
+        function nextQuestion() {
+            if (!answered) {
+                alert("Por favor, selecione uma resposta antes de continuar.");
+                return;
+            }
+            current++;
+            if (current >= quiz.length) {
+                alert("Fim do quiz! Parabéns por participar.");
+                current = 0;
+            }
+            showQuestion(current);
+        }
+
+        showQuestion(current);
+    </script>
+</body>
+
+</html>
